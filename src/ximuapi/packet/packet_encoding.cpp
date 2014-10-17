@@ -2,13 +2,13 @@
   Copyright 2014 Auke-Dirk Pietersma
 */
 
-#include "../../../include/ximuapi/packet/packet_encoding.h"
-
 #include <vector>
+
+#include "ximuapi/packet/packet_encoding.h"
 
 namespace ximu {
 
-void PacketEncoding::rightShiftBytes(const std::vector<unsigned char>& v) {
+void PacketEncoding::rightShiftBytes(std::vector<unsigned char>& v) {
   size_t size = v.size();
   v[size - 1] >>= 1;
 

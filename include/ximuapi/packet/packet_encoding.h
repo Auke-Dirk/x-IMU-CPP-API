@@ -22,7 +22,7 @@ class PacketEncoding{
   // Right shifts the contents by 1 bit. The lsb of byte x becomes the msb of
   // byte x+1.
   // </summary>
-  static void rightShiftBytes(const std::vector<unsigned char>& v);
+  static void rightShiftBytes(std::vector<unsigned char>& v);
 
     // <summary>
     // Encodes packet with consecutive right shifts so that
