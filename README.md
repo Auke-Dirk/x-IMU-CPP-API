@@ -22,3 +22,7 @@ For linux:
    1. create a build directory inside "x-IMU-CPP-API"
    2. from this build directory run: cmake ..
    3. from this build directory run: make
+
+Ported File List
+----------------
++ [PacketEncoding.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/PacketEncoding.cs)
