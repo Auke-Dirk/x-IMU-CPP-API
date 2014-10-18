@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
   // illustrate the single bit shift
 
   // the ximu decoding and encoding has an effect on the packet size
-  // to get the encoded size you pass the size of an decoded packet to
+  // to get the encoded size you pass the size of a decoded packet to
   // encodedPacketSize, and ofcourse visa versa
   unsigned es = ximu::PacketEncoding::encodedPacketSize(decoded.size());
   unsigned ds = ximu::PacketEncoding::decodedPacketSize(encoded.size());
