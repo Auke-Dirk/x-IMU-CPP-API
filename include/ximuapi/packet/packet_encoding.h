@@ -19,6 +19,22 @@ namespace ximu {
 class PacketEncoding{
  public:
   // <summary>
+  // Calculates the size needed to decode a packet.
+  // </summary>
+  static unsigned decodedPacketSize(unsigned encodedPacketSize);
+
+  // <summary>
+  // Calculates the size needed to encode a packet.
+  // </summary>
+  static unsigned encodedPacketSize(unsigned decodedPacketSize);
+
+  // <summary>
+  // Left shifts the contents by 1 bit. The msb of byte
+  // x becomes the lsb of byte x-1.
+  // </summary>
+  static void leftShiftBytes(std::vector<unsigned char>& v);
+
+  // <summary>
   // Right shifts the contents by 1 bit. The lsb of byte x becomes the msb of
   // byte x+1.
   // </summary>
@@ -30,18 +46,17 @@ class PacketEncoding{
     // final byte is set to indicate the end of the packet.
     // </summary>
   template<typename InputIterator, typename OutputIterator>
-    static void encodePacket(InputIterator src, size_t count,
-                             OutputIterator dest){
+      static void encodePacket(InputIterator src, size_t count,
+                               OutputIterator dest) {
       // calculate new message length
-      float len = static_cast<float>(count) * 1.125f + 0.125f;
-      unsigned encodedLength = std::ceil(len);
-
+      unsigned encodedLength = encodedPacketSize(count);
       std::vector<unsigned char> encodedPacket(encodedLength, 0);
       std::vector<unsigned char> shiftRegister(encodedLength, 0);
 
       // fill the shift register
       std::copy_n(src, count, shiftRegister.begin());
 
+      // shift
       for (unsigned idx = 0; idx != encodedLength; ++idx) {
         rightShiftBytes(shiftRegister);           // r-shift clear msb i
         encodedPacket[idx] = shiftRegister[idx];  // store encoded byte
@@ -51,6 +66,35 @@ class PacketEncoding{
       encodedPacket.back() |= 0x80;
       std::copy_n(encodedPacket.begin(), encodedLength, dest);
     }
+
+
+
+  // <summary>
+  // Decodes a packet with consecutive left shifts so that the msb of
+  //  each encoded byte is removed.
+  // </summary>
+  template<typename InputIterator, typename OutputIterator>
+    static void decodePacket(InputIterator src, size_t count,
+                             OutputIterator dest) {
+    // calculate new message length
+    unsigned decodedLength = decodedPacketSize(count);
+
+    std::vector<unsigned char> encodedPacket(count, 0);
+    std::vector<unsigned char> shiftRegister(count, 0);
+
+    // fill encoded buffer
+    std::copy_n(src, count, encodedPacket.begin());
+
+    // shift do,while
+    auto byteIt = src + count;
+    do {
+      --byteIt;
+      shiftRegister[byteIt - src] = *byteIt;
+      leftShiftBytes(shiftRegister);
+    } while (byteIt != src);
+
+    std::copy_n(shiftRegister.begin(), decodedLength, dest);
+  }
 };
 
 }  // namespace ximu
