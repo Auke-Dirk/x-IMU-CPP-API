@@ -25,4 +25,4 @@ For linux:
 
 Ported File List
 ----------------
-+ [PacketEncoding.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/PacketEncoding.cs)
++ [PacketEncoding.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/PacketEncoding.cs) ::  [packet_encoding.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/packet/packet_encoding.h)
