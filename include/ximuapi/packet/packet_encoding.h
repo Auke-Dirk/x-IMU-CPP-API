@@ -67,8 +67,6 @@ class PacketEncoding{
       std::copy_n(encodedPacket.begin(), encodedLength, dest);
     }
 
-
-
   // <summary>
   // Decodes a packet with consecutive left shifts so that the msb of
   //  each encoded byte is removed.
@@ -79,11 +77,7 @@ class PacketEncoding{
     // calculate new message length
     unsigned decodedLength = decodedPacketSize(count);
 
-    std::vector<unsigned char> encodedPacket(count, 0);
     std::vector<unsigned char> shiftRegister(count, 0);
-
-    // fill encoded buffer
-    std::copy_n(src, count, encodedPacket.begin());
 
     // shift do,while
     auto byteIt = src + count;
