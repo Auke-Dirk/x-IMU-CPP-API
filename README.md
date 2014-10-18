@@ -19,6 +19,6 @@ Build Tool
 [Cmake](http://www.cmake.org) is used as the main build tool.
 
 For linux:
-1. create a build directory inside "x-IMU-CPP-API"
-2. from this build directory run: cmake ..
-3. from this build directory run: make
+   1. create a build directory inside "x-IMU-CPP-API"
+   2. from this build directory run: cmake ..
+   3. from this build directory run: make
