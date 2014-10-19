@@ -28,7 +28,7 @@ Test Tool
 [CTest](http://www.cmake.org/cmake/help/v2.8.8/ctest.html) can be used for testing.
 CMake has been configured to provide automated testing.
 
-For linux: simply call: make test 
+For linux: make test 
 
 Documentation
 --------------
