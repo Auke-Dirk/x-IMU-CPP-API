@@ -48,6 +48,10 @@ class PacketEncoding{
   template<typename InputIterator, typename OutputIterator>
       static void encodePacket(InputIterator src, size_t count,
                                OutputIterator dest) {
+      // need at least one byte to encode 
+      if (count < 1)
+        return;
+
       // calculate new message length
       unsigned encodedLength = encodedPacketSize(count);
       std::vector<unsigned char> encodedPacket(encodedLength, 0);
@@ -74,6 +78,10 @@ class PacketEncoding{
   template<typename InputIterator, typename OutputIterator>
     static void decodePacket(InputIterator src, size_t count,
                              OutputIterator dest) {
+    // need at least one byte to decode to a one byte packet
+    if (count < 2)
+      return;
+
     // calculate new message length
     unsigned decodedLength = decodedPacketSize(count);
 

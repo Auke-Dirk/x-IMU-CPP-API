@@ -50,5 +50,14 @@ int main(int argc, char* argv[]) {
   if (decTest != decoded)
     return 1;
 
+
+  // test on invalid input
+  ximu::PacketEncoding::decodePacket(
+      encTest.begin(), 0 , back_inserter(decTest));
+
+  ximu::PacketEncoding::encodePacket(
+      decoded.begin(), 0, back_inserter(encTest));
+
+  
   return 0;
 }
