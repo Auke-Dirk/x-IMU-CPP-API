@@ -23,12 +23,14 @@ add_library(X-IMU-API STATIC
 # setup testing
 
 # add c++ program
-add_executable (
-PKT_ENC_TEST tests/packet_encoding_test.cpp
-)
+add_executable (PKT_ENC_TEST tests/packet_encoding_test.cpp)
+add_executable (PKT_CNST_TEST tests/packet_construction_test.cpp)
+
 
 # link the x-IMU-API with the programs
 target_link_libraries(PKT_ENC_TEST X-IMU-API)
+target_link_libraries(PKT_CNST_TEST X-IMU-API)
 
 #perform the test
 add_test(PACKET_ENCODING_DECODING PKT_ENC_TEST)
+add_test(PACKET_CONSTRUCTION PKT_CNST_TEST)

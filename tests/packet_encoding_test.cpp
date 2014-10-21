@@ -41,6 +41,16 @@ int main(int argc, char* argv[]) {
   if (encTest != encoded)
     return 1;
 
+  encTest.clear();
+  // using two input iterators instead of one and a size
+  ximu::PacketEncoding::encodePacket(decoded.begin(),decoded.end(),
+                                     back_inserter(encTest));
+
+    // perform same test
+  if (encTest != encoded)
+    return 1;
+
+
   // passing our encTest back into the decoder we should get the original data
   std::vector<unsigned char> decTest;
   ximu::PacketEncoding::decodePacket(
@@ -50,6 +60,16 @@ int main(int argc, char* argv[]) {
   if (decTest != decoded)
     return 1;
 
+  decTest.clear();
+  // using two input iterators instead of one and a size
+  ximu::PacketEncoding::decodePacket(encoded.begin(),encoded.end(),
+                                     back_inserter(decTest));
+
+  // perform same test
+  if (decTest != decoded)
+    return 1;
+  
+  
 
   // test on invalid input
   ximu::PacketEncoding::decodePacket(

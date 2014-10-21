@@ -40,43 +40,55 @@ class PacketEncoding{
   // </summary>
   static void rightShiftBytes(std::vector<unsigned char>& v);
 
-    // <summary>
-    // Encodes packet with consecutive right shifts so that
-    // the msb of each encoded byte is clear. The msb of the
-    // final byte is set to indicate the end of the packet.
-    // </summary>
+  // <summary>
+  // Encodes packet with consecutive right shifts so that
+  // the msb of each encoded byte is clear. The msb of the
+  // final byte is set to indicate the end of the packet.
+  // </summary>
+  template<typename InputIterator,typename OutputIterator>
+  static void encodePacket(InputIterator begin, InputIterator end,
+                           OutputIterator dest) {
+    encodePacket(begin, std::distance(begin,end), dest);
+  }
+  // overload
   template<typename InputIterator, typename OutputIterator>
-      static void encodePacket(InputIterator src, size_t count,
-                               OutputIterator dest) {
-      // need at least one byte to encode 
-      if (count < 1)
-        return;
+  static void encodePacket(InputIterator src, size_t count,
+                           OutputIterator dest) {
+    // need at least one byte to encode 
+    if (count < 1)
+      return;
 
-      // calculate new message length
-      unsigned encodedLength = encodedPacketSize(count);
-      std::vector<unsigned char> encodedPacket(encodedLength, 0);
-      std::vector<unsigned char> shiftRegister(encodedLength, 0);
+    // calculate new message length
+    unsigned encodedLength = encodedPacketSize(count);
+    std::vector<unsigned char> encodedPacket(encodedLength, 0);
+    std::vector<unsigned char> shiftRegister(encodedLength, 0);
+    
+    // fill the shift register
+    std::copy_n(src, count, shiftRegister.begin());
 
-      // fill the shift register
-      std::copy_n(src, count, shiftRegister.begin());
-
-      // shift
-      for (unsigned idx = 0; idx != encodedLength; ++idx) {
-        rightShiftBytes(shiftRegister);           // r-shift clear msb i
-        encodedPacket[idx] = shiftRegister[idx];  // store encoded byte
-        shiftRegister[idx] = 0;                   // clear byte from sr
-      }
-      // set msb of framing byte
-      encodedPacket.back() |= 0x80;
-      std::copy_n(encodedPacket.begin(), encodedLength, dest);
+    // shift
+    for (unsigned idx = 0; idx != encodedLength; ++idx) {
+      rightShiftBytes(shiftRegister);           // r-shift clear msb i
+      encodedPacket[idx] = shiftRegister[idx];  // store encoded byte
+      shiftRegister[idx] = 0;                   // clear byte from sr
     }
+    // set msb of framing byte
+    encodedPacket.back() |= 0x80;
+    std::copy_n(encodedPacket.begin(), encodedLength, dest);
+  }
 
   // <summary>
   // Decodes a packet with consecutive left shifts so that the msb of
   //  each encoded byte is removed.
   // </summary>
+  template<typename InputIterator,typename OutputIterator>
+  static void decodePacket(InputIterator begin, InputIterator end,
+                           OutputIterator dest) {
+    decodePacket(begin, std::distance(begin,end), dest);
+  }
+  // overload
   template<typename InputIterator, typename OutputIterator>
-    static void decodePacket(InputIterator src, size_t count,
+  static void decodePacket(InputIterator src, size_t count,
                              OutputIterator dest) {
     // need at least one byte to decode to a one byte packet
     if (count < 2)
