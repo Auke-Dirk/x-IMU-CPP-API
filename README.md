@@ -40,3 +40,4 @@ Ported File List
 ----------------
 + [PacketEncoding.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/PacketEncoding.cs) ::  [packet_encoding.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/packet/packet_encoding.h) ::
 [packet_encoding_test.cpp](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/tests/packet_encoding_test.cpp)
++ [FixedFloat.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/FixedFloat.cs)  :: [fixed_float.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/utils/fixed_float.h) :: [fixed_float_test.cpp](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/tests/fixed_float_test.cpp) 
