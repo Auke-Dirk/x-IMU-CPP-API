@@ -19,6 +19,7 @@ include_directories(
 add_library(X-IMU-API STATIC
   src/ximuapi/packet/packet_encoding.cpp
   src/ximuapi/utils/fixed_float.cpp
+  src/ximuapi/data/register_data.cpp
 )
 
 # setup testing
@@ -27,14 +28,17 @@ add_library(X-IMU-API STATIC
 add_executable (PKT_ENC_TEST tests/packet_encoding_test.cpp)
 add_executable (PKT_CNST_TEST tests/packet_construction_test.cpp)
 add_executable (FXD_FLT_TEST tests/fixed_float_test.cpp)
+add_executable (DATA_TYPES_TEST tests/data_types_test.cpp)
 
 
 # link the x-IMU-API with the programs
 target_link_libraries(PKT_ENC_TEST X-IMU-API)
 target_link_libraries(PKT_CNST_TEST X-IMU-API)
 target_link_libraries(FXD_FLT_TEST X-IMU-API)
+target_link_libraries(DATA_TYPES_TEST X-IMU-API)
 
 # perform the test
 add_test(PACKET_ENCODING_DECODING PKT_ENC_TEST)
 add_test(PACKET_CONSTRUCTION PKT_CNST_TEST)
 add_test(FIXED_FLOAT FXD_FLT_TEST)
+add_test(DATA_TYPES DATA_TYPES_TEST)
