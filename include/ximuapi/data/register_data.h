@@ -11,19 +11,19 @@ namespace ximu {
 
 // Register Data class
 class RegisterData {
-public:
+ public:
 // Constructors
   RegisterData();
-  RegisterData(RegisterAddresses address);
-  RegisterData(RegisterAddresses address, float value);
-  RegisterData(RegisterAddresses address, unsigned short value);
+  explicit RegisterData(reg::RegisterAddresses address);
+  RegisterData(reg::RegisterAddresses address, float value);
+  RegisterData(reg::RegisterAddresses address, unsigned short value);
   RegisterData(unsigned short address, unsigned short value);
-  
+
   // <summary>
-  // Gets or sets the register address. 
+  // Gets or sets the register address.
   // </summary>
-  RegisterAddresses address();
-  void address(RegisterAddresses address);
+  reg::RegisterAddresses address();
+  void address(reg::RegisterAddresses address);
 
   // <summary>
   // Gets or sets 16-bit register value.
@@ -32,23 +32,28 @@ public:
   void value(unsigned short value);
 
   // <summary>
-  // Converts 16-bit register value to float using fixed-point 
+  // Converts 16-bit register value to float using fixed-point
   // precision defined in ximu::Qvals.
   // </summary>
   float floatValue();
 
   // <summary>
   // Sets 16-bit register value from float interpreted using fixed-point
-  // precision defined in ximu::Qvals 
+  // precision defined in ximu::Qvals
   /// </summary>
   void floatValue(float value);
 
-private:
+ private:
+  // the register
+  reg::RegisterAddresses _address;
+
+  // the register's valuea
+  unsigned short _value;
+
   // <summary>
   // Returns ximu::Qvals associated with register address.
   // </summary>
   Qvals LookupQval();
-  
 };
 
 };  // namespace ximu
