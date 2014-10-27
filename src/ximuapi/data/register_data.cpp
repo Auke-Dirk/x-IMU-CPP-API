@@ -40,7 +40,7 @@ RegisterData::RegisterData(unsigned short address,
   }
 }
 
-reg::RegisterAddresses RegisterData::address() {
+reg::RegisterAddresses RegisterData::address() const {
   return _address;
 }
 
@@ -48,7 +48,7 @@ void RegisterData::address(reg::RegisterAddresses address) {
   _address = address;
 }
 
-unsigned short RegisterData::value() {
+unsigned short RegisterData::value() const {
   return _value;
 }
 
@@ -56,7 +56,7 @@ void RegisterData::value(unsigned short value) {
   _value = value;
 }
 
-float RegisterData::floatValue() {
+float RegisterData::floatValue() const {
   return FixedFloat::toFloat(_value, LookupQval());
 }
 
@@ -69,7 +69,7 @@ void RegisterData::floatValue(float value) {
 }
 
 
-Qvals RegisterData::LookupQval() {
+Qvals RegisterData::LookupQval() const {
   switch (_address) {
     /*  case reg::FIRMWARE_VERSION_MAJOR_NUM:
     case reg::FIRMWARE_VERSION_MINOR_NUM:
@@ -210,45 +210,45 @@ Qvals RegisterData::LookupQval() {
        case reg::ADXL345_BUS_DATA_MODE:
     case reg::ADXL345_BUS_DATA_RATE:*/
 
-    case reg::ADXL345A_SENSITIVITY_X:
-    case reg::ADXL345A_SENSITIVITY_Y:
-    case reg::ADXL345A_SENSITIVITY_Z:
-      return ADXL345_BUS_SENSITIVITY;
+    case reg::ADXL_345A_SENSITIVITY_X:
+    case reg::ADXL_345A_SENSITIVITY_Y:
+    case reg::ADXL_345A_SENSITIVITY_Z:
+      return ADXL_345_BUS_SENSITIVITY;
 
-    case reg::ADXL345A_BIAS_X:
-    case reg::ADXL345A_BIAS_Y:
-    case reg::ADXL345A_BIAS_Z:
-      return ADXL345_BUS_BIAS;
+    case reg::ADXL_345A_BIAS_X:
+    case reg::ADXL_345A_BIAS_Y:
+    case reg::ADXL_345A_BIAS_Z:
+      return ADXL_345_BUS_BIAS;
 
-    case reg::ADXL345B_SENSITIVITY_X:
-    case reg::ADXL345B_SENSITIVITY_Y:
-    case reg::ADXL345B_SENSITIVITY_Z:
-      return ADXL345_BUS_SENSITIVITY;
+    case reg::ADXL_345B_SENSITIVITY_X:
+    case reg::ADXL_345B_SENSITIVITY_Y:
+    case reg::ADXL_345B_SENSITIVITY_Z:
+      return ADXL_345_BUS_SENSITIVITY;
 
-    case reg::ADXL345B_BIAS_X:
-    case reg::ADXL345B_BIAS_Y:
-    case reg::ADXL345B_BIAS_Z:
-      return ADXL345_BUS_BIAS;
+    case reg::ADXL_345B_BIAS_X:
+    case reg::ADXL_345B_BIAS_Y:
+    case reg::ADXL_345B_BIAS_Z:
+      return ADXL_345_BUS_BIAS;
 
-    case reg::ADXL345C_SENSITIVITY_X:
-    case reg::ADXL345C_SENSITIVITY_Y:
-    case reg::ADXL345C_SENSITIVITY_Z:
-      return ADXL345_BUS_SENSITIVITY;
+    case reg::ADXL_345C_SENSITIVITY_X:
+    case reg::ADXL_345C_SENSITIVITY_Y:
+    case reg::ADXL_345C_SENSITIVITY_Z:
+      return ADXL_345_BUS_SENSITIVITY;
 
-    case reg::ADXL345C_BIAS_X:
-    case reg::ADXL345C_BIAS_Y:
-    case reg::ADXL345C_BIAS_Z:
-      return ADXL345_BUS_BIAS;
+    case reg::ADXL_345C_BIAS_X:
+    case reg::ADXL_345C_BIAS_Y:
+    case reg::ADXL_345C_BIAS_Z:
+      return ADXL_345_BUS_BIAS;
 
-    case reg::ADXL345D_SENSITIVITY_X:
-    case reg::ADXL345D_SENSITIVITY_Y:
-    case reg::ADXL345D_SENSITIVITY_Z:
-      return ADXL345_BUS_SENSITIVITY;
+    case reg::ADXL_345D_SENSITIVITY_X:
+    case reg::ADXL_345D_SENSITIVITY_Y:
+    case reg::ADXL_345D_SENSITIVITY_Z:
+      return ADXL_345_BUS_SENSITIVITY;
 
-    case reg::ADXL345D_BIAS_X:
-    case reg::ADXL345D_BIAS_Y:
-    case reg::ADXL345D_BIAS_Z:
-      return ADXL345_BUS_BIAS;
+    case reg::ADXL_345D_BIAS_X:
+    case reg::ADXL_345D_BIAS_Y:
+    case reg::ADXL_345D_BIAS_Z:
+      return ADXL_345_BUS_BIAS;
 
       /*case reg::UART_BAUDRATE:
         case reg::UART_HARDWARE_FLOWCONTROL:

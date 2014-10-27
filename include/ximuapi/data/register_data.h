@@ -22,20 +22,20 @@ class RegisterData {
   // <summary>
   // Gets or sets the register address.
   // </summary>
-  reg::RegisterAddresses address();
+  reg::RegisterAddresses address() const;
   void address(reg::RegisterAddresses address);
 
   // <summary>
   // Gets or sets 16-bit register value.
   // </summary>
-  unsigned short value();
+  unsigned short value() const;
   void value(unsigned short value);
 
   // <summary>
   // Converts 16-bit register value to float using fixed-point
   // precision defined in ximu::Qvals.
   // </summary>
-  float floatValue();
+  float floatValue() const;
 
   // <summary>
   // Sets 16-bit register value from float interpreted using fixed-point
@@ -53,7 +53,7 @@ class RegisterData {
   // <summary>
   // Returns ximu::Qvals associated with register address.
   // </summary>
-  Qvals LookupQval();
+  Qvals LookupQval() const;
 };
 
 };  // namespace ximu

@@ -11,7 +11,7 @@
 
 #include "ximuapi/enumerations.h"
 #include "ximuapi/packet/packet_encoding.h"
-
+#include "ximuapi/data/register_data.h"
 
 namespace ximu {
 
@@ -27,13 +27,49 @@ public:
 // </summary>
 template<typename OutputIterator>
 static void constructCommandPacket(CommandCodes commandCode,
-                                     OutputIterator dest) {
+                                   OutputIterator dest) {
   std::vector<unsigned char> decoded = {
     static_cast<unsigned char>(PacketHeaders::COMMAND),
     static_cast<unsigned char>(static_cast<unsigned short>(commandCode) >> 8),
     static_cast<unsigned char>(commandCode),
     0 };
 
+  decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
+  
+  PacketEncoding::encodePacket(decoded.begin(),decoded.end(), dest);
+}
+
+// <summary>
+// Constructs a read register packet.
+// </summary>
+template<typename OutputIterator>
+static void constructReadRegisterPacket(const RegisterData &data,
+                                        OutputIterator dest) {
+  std::vector<unsigned char> decoded = {
+    static_cast<unsigned char>(PacketHeaders::READ_REGISTER),
+    static_cast<unsigned char>(static_cast<unsigned short>(data.address()) >> 8),
+    static_cast<unsigned char>(data.address()),
+    0 };
+  
+  decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
+  
+  PacketEncoding::encodePacket(decoded.begin(),decoded.end(), dest);
+}
+
+// <summary>
+// Constructs a write register packet.
+// </summary>
+template<typename OutputIterator>
+static void constructWriteRegisterPacket(const RegisterData &data,
+                                         OutputIterator dest) {
+  std::vector<unsigned char> decoded = {
+    static_cast<unsigned char>(PacketHeaders::WRITE_REGISTER),
+    static_cast<unsigned char>(static_cast<unsigned short>(data.address()) >> 8),
+    static_cast<unsigned char>(data.address()),
+    static_cast<unsigned char>(data.value() >> 8),
+    static_cast<unsigned char>(data.value()),
+    0 };
+  
   decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
   
   PacketEncoding::encodePacket(decoded.begin(),decoded.end(), dest);

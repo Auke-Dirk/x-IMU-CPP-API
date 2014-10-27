@@ -20,6 +20,7 @@ add_library(X-IMU-API STATIC
   src/ximuapi/packet/packet_encoding.cpp
   src/ximuapi/utils/fixed_float.cpp
   src/ximuapi/data/register_data.cpp
+  src/ximuapi/data/datetime_data.cpp
 )
 
 # setup testing
