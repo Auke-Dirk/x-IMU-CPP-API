@@ -38,6 +38,9 @@ what functionality already has been ported alongside its test/documentation.
 
 Ported File List
 ----------------
-+ [PacketEncoding.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/PacketEncoding.cs) ::  [packet_encoding.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/packet/packet_encoding.h) ::
-[packet_encoding_test.cpp](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/tests/packet_encoding_test.cpp)
-+ [FixedFloat.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/FixedFloat.cs)  :: [fixed_float.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/utils/fixed_float.h) :: [fixed_float_test.cpp](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/tests/fixed_float_test.cpp) 
+| Orignal | Ported | Test/Documentation |
+| ------- | ------ | ------------------ |
+| [FixedFloat.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/FixedFloat.cs) | [fixed_float.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/utils/fixed_float.h) | [fixed_float_test.cpp](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/tests/fixed_float_test.cpp)
+| [PacketEncoding.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/PacketEncoding.cs) | [packet_encoding.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/packet/packet_encoding.)| [packet_encoding_test.cpp](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/tests/packet_encoding_test.cpp)
+| [RegisterData.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/RegisterData.cs) | [register_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/register_data.h) | [data_types_test.cpp](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/tests/data_types_test.cpp) |
+
