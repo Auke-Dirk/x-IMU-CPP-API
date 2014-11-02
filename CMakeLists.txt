@@ -21,6 +21,8 @@ add_library(X-IMU-API STATIC
   src/ximuapi/utils/fixed_float.cpp
   src/ximuapi/data/register_data.cpp
   src/ximuapi/data/datetime_data.cpp
+  src/ximuapi/data/quaternion_data.cpp
+  
 )
 
 # setup testing

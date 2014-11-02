@@ -5,6 +5,9 @@
 #ifndef INCLUDE_XIMUAPI_UTILS_UTILITY_H_
 #define INCLUDE_XIMUAPI_UTILS_UTILITY_H_
 
+#include <algorithm>
+#include <vector>
+
 namespace ximu {
 
 class Utility {
@@ -14,6 +17,22 @@ class Utility {
   static bool isWithinInclIncl(T lhs, T rhs, T2 query) {
     return query >= lhs && query <= rhs;
   }
+  
+  // Compaires two containers, and returns if there 
+  // element wise difference is within an err bound.
+  template<typename T1, typename T2>
+  static bool isWithinError(T1 lhs, T1 rhs, T2 err)
+  {
+    T1 deltas;
+    std::transform(lhs.begin(),lhs.end(),rhs.begin(), 
+		   std::back_inserter(deltas), 
+		   [&](double l, double r) {
+		     return std::abs(l - r);
+		   });
+    return std::accumulate(deltas.begin(),deltas.end(),
+			   static_cast<T2>(0.0)) <= err;
+  }
+  
 };
 
 }  // namespace ximu

@@ -24,4 +24,4 @@ short FixedFloat::toFixed(float floatValue, Qvals q) {
   return static_cast<short>(tmp);
 }
 
-}
+}  // namespace ximu
