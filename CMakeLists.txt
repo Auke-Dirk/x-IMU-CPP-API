@@ -22,7 +22,7 @@ add_library(X-IMU-API STATIC
   src/ximuapi/data/register_data.cpp
   src/ximuapi/data/datetime_data.cpp
   src/ximuapi/data/quaternion_data.cpp
-  
+  src/ximuapi/serialization/reader_base.cpp
 )
 
 # setup testing
@@ -32,6 +32,7 @@ add_executable (PKT_ENC_TEST tests/packet_encoding_test.cpp)
 add_executable (PKT_CNST_TEST tests/packet_construction_test.cpp)
 add_executable (FXD_FLT_TEST tests/fixed_float_test.cpp)
 add_executable (DATA_TYPES_TEST tests/data_types_test.cpp)
+add_executable (DATA_SERIZ_TEST tests/data_serialization_test.cpp)
 
 
 # link the x-IMU-API with the programs
@@ -39,9 +40,14 @@ target_link_libraries(PKT_ENC_TEST X-IMU-API)
 target_link_libraries(PKT_CNST_TEST X-IMU-API)
 target_link_libraries(FXD_FLT_TEST X-IMU-API)
 target_link_libraries(DATA_TYPES_TEST X-IMU-API)
+target_link_libraries(DATA_SERIZ_TEST X-IMU-API)
+
+# add ximu port dump for as test data
+configure_file(data/ximu.dmp ximu.dmp COPYONLY)
 
 # perform the test
 add_test(PACKET_ENCODING_DECODING PKT_ENC_TEST)
 add_test(PACKET_CONSTRUCTION PKT_CNST_TEST)
 add_test(FIXED_FLOAT FXD_FLT_TEST)
 add_test(DATA_TYPES DATA_TYPES_TEST)
+add_test(DATA_DESERIALIZER DATA_SERIZ_TEST)

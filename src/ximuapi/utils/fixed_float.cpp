@@ -12,6 +12,15 @@ float FixedFloat::toFloat(short fixedValue, Qvals q) {
       static_cast<float>((1 << static_cast<int>(q)));
 }
 
+short FixedFloat::toFixed(char msb, char lsb) {
+  return (static_cast<short>(msb) << 8) | static_cast<short>(lsb);
+}
+
+float FixedFloat::toFloat(char msb, char lsb, Qvals q) {
+  return toFloat(toFixed(msb, lsb), q);
+}
+
+
 short FixedFloat::toFixed(float floatValue, Qvals q) {
   int tmp = static_cast<int>(
       floatValue * static_cast<int>(1 << static_cast<int>(q)));

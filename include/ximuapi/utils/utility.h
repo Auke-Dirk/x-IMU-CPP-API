@@ -17,22 +17,30 @@ class Utility {
   static bool isWithinInclIncl(T lhs, T rhs, T2 query) {
     return query >= lhs && query <= rhs;
   }
-  
-  // Compaires two containers, and returns if there 
+
+  // Tests if the query falls within the range, <x1,x2,x3>
+  template<typename T, typename T2>
+  static bool isWithinExclExcl(T lhs, T rhs, T2 query) {
+    return query > lhs && query < rhs;
+  }
+
+  // Compaires two containers, and returns if there
   // element wise difference is within an err bound.
   template<typename T1, typename T2>
-  static bool isWithinError(T1 lhs, T1 rhs, T2 err)
-  {
+  static bool isWithinError(T1 lhs, T1 rhs, T2 err) {
     T1 deltas;
-    std::transform(lhs.begin(),lhs.end(),rhs.begin(), 
-		   std::back_inserter(deltas), 
-		   [&](double l, double r) {
-		     return std::abs(l - r);
-		   });
-    return std::accumulate(deltas.begin(),deltas.end(),
-			   static_cast<T2>(0.0)) <= err;
+    //  transform to distances
+    std::transform(lhs.begin(), lhs.end(), rhs.begin(),
+                   std::back_inserter(deltas),
+                   [&](double l, double r) {
+                     return std::abs(l - r);
+                   });
+    // accumulate
+    T2 clErr =  std::accumulate(deltas.begin(), deltas.end(),
+                                static_cast<T2>(0.0));
+
+    return clErr <= err;  // calculated error
   }
-  
 };
 
 }  // namespace ximu

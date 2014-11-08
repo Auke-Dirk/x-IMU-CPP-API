@@ -20,6 +20,34 @@ class FixedFloat {
 // </summary>
 static float toFloat(short fixedValue, Qvals q);
 
+/// <summary>
+/// Concatenates 2 bytes to return a short.
+/// </summary>
+/// <param name="MSB">
+/// Most Significant Byte.
+/// </param>
+/// <param name="LSB">
+/// Least Significant Byte.
+/// </param>
+/// <returns>
+/// MSB and LSB concatenated to create a short.
+/// </returns>
+static short toFixed(char msb, char lsb);
+
+/// <summary>
+/// Concatenates 2 bytes to return a float.
+/// </summary>
+/// <param name="MSB">
+/// Most Significant Byte.
+/// </param>
+/// <param name="LSB">
+/// Least Significant Byte.
+/// </param>
+/// <returns>
+/// MSB and LSB concatenated to create a float.
+/// </returns>
+static float toFloat(char msb, char lsb, Qvals q);
+
 // <summary>
 // Returns 16-bit fixed-point value from specified floating-point
 // value with saturation.
