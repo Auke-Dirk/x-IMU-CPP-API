@@ -11,6 +11,9 @@
 #include "ximuapi/data/register_data.h"
 #include "ximuapi/data/datetime_data.h"
 #include "ximuapi/data/quaternion_data.h"
+#include "ximuapi/data/vector3.h"
+#include "ximuapi/data/cal_inertial_and_magnetic_data.h"
+
 
 // Example/test on constructing commands
 int main(int argc, char* argv[]) {
@@ -116,5 +119,29 @@ int main(int argc, char* argv[]) {
   if (!ximu::Utility::isWithinError(q5.rotationMatrix(), rotationMatrix, 0.01f))
     return 1;
 
+  //////////////////////////////////////////////
+  //        CalInertialAndMagneticData        //
+  //////////////////////////////////////////////
+  ximu::Vector3f gyro(1.0f,2.0f,3.0f);
+  ximu::Vector3f acce(4.0f,5.0f,6.0f);
+  ximu::Vector3f magn(7.0f,8.0f,9.0f);
+  ximu::CalInertialAndMagneticData ciamd(gyro,acce,magn) ;
+  
+  if (ciamd.gyroscope().x() != gyro.x() ||
+      ciamd.gyroscope().y() != gyro.y() ||
+      ciamd.gyroscope().z() != gyro.z() ||
+      ciamd.accelerometer().x() != acce.x() ||
+      ciamd.accelerometer().y() != acce.y() ||
+      ciamd.accelerometer().z() != acce.z() ||
+      ciamd.magnetometer().x() != magn.x() ||
+      ciamd.magnetometer().y() != magn.y() ||
+      ciamd.magnetometer().z() != magn.z()) {
+      
+    return 1;
+  }
+    
+  
+  
+  
   return 0;
 }
