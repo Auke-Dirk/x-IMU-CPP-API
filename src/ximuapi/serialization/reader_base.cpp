@@ -43,8 +43,11 @@ void ReaderBase::read() {
     switch (PacketReader::read(_buffer.begin(), frameBuffer + 1)) {
       case PacketReader::INVALID_CHECKSUM:
       case PacketReader::OKE:
+      case PacketReader::INVALID_PACKET_SIZE:
         _buffer.erase(_buffer.begin(), frameBuffer + 1);
         break;
+      default:
+        _buffer.erase(_buffer.begin(), frameBuffer + 1);
     }
   }
 }
@@ -52,4 +55,6 @@ void ReaderBase::read() {
 void ReaderBase::recievedQuaternionData(QuaternionData& q) {}
 void ReaderBase::recievedDatTimeData(DateTimeData& d) {}
 void ReaderBase::recievedRegisterData(RegisterData& r) {}
+void ReaderBase::recievedCalInertialAndMagneticData(
+    CalInertialAndMagneticData& c) {}
 }  // namespace ximu

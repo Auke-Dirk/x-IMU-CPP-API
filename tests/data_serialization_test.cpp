@@ -18,17 +18,30 @@ class ApplicationXimuReader : public ximu::ReaderBase {
  public:
   ApplicationXimuReader()
   :
-      _quatCount(0) {
+      _quatCount(0), _calInAndMagCount(0) {
   }
   size_t QuaternionCount() {
     return _quatCount;
   }
 
+  size_t CalInertialAndMagneticDataCount() {
+    return _calInAndMagCount;
+  }
+
  private:
   size_t _quatCount;
+  size_t _calInAndMagCount;
+
   virtual void recievedQuaternionData(ximu::QuaternionData& q) {
       ++_quatCount;
   }
+  virtual void recievedCalInertialAndMagneticData(
+    ximu::CalInertialAndMagneticData& c){
+      ++_calInAndMagCount;
+      auto mag = c.magnetometer();
+      auto acc = c.accelerometer();
+      auto gyro = c.gyroscope();
+    }
 };
 
 int main(int argc, char* argv[]) {
@@ -77,5 +90,7 @@ int main(int argc, char* argv[]) {
   if (reader.QuaternionCount() != 565)
     return 1;
 
+  if (reader.CalInertialAndMagneticDataCount() != 2260)
+    return 1;
   return 0;
 }

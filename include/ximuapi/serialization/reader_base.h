@@ -59,6 +59,8 @@ class ReaderBase : protected PacketReader {
   virtual void recievedQuaternionData(QuaternionData& q);
   virtual void recievedDatTimeData(DateTimeData& d);
   virtual void recievedRegisterData(RegisterData& r);
+  virtual void recievedCalInertialAndMagneticData(
+    CalInertialAndMagneticData& c);
 };
 
 }  // namespace ximu
