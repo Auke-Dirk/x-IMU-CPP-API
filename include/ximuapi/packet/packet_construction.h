@@ -80,7 +80,7 @@ static void constructWriteRegisterPacket(const RegisterData &data,
 //  </summary>
 template<typename OutputIterator>
 static void constructWriteDateTimePacket(const DateTimeData& data,
-                                         OOutputIterator dest) {
+                                         OutputIterator dest) {
   std::vector<unsigned char> decoded = {
     static_cast<unsigned char>(PacketHeaders::WRITE_DATETIME),
     static_cast<unsigned char>((((((data.year() - 2000) % 100) / 10) << 4)
