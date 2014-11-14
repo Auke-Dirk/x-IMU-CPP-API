@@ -12,6 +12,7 @@
 #include "ximuapi/enumerations.h"
 #include "ximuapi/packet/packet_encoding.h"
 #include "ximuapi/data/register_data.h"
+#include "ximuapi/data/datetime_data.h"
 
 namespace ximu {
 
@@ -21,7 +22,7 @@ namespace ximu {
 // </summary>
 
 class PacketConstruction {
-public:
+ public:
 // <summary>
 // Constructs an encoded command packet
 // </summary>
@@ -35,8 +36,7 @@ static void constructCommandPacket(CommandCodes commandCode,
     0 };
 
   decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
-  
-  PacketEncoding::encodePacket(decoded.begin(),decoded.end(), dest);
+  PacketEncoding::encodePacket(decoded.begin(), decoded.end(), dest);
 }
 
 // <summary>
@@ -47,13 +47,13 @@ static void constructReadRegisterPacket(const RegisterData &data,
                                         OutputIterator dest) {
   std::vector<unsigned char> decoded = {
     static_cast<unsigned char>(PacketHeaders::READ_REGISTER),
-    static_cast<unsigned char>(static_cast<unsigned short>(data.address()) >> 8),
+    static_cast<unsigned char>(static_cast<unsigned short>(
+        data.address()) >> 8),
     static_cast<unsigned char>(data.address()),
     0 };
-  
+
   decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
-  
-  PacketEncoding::encodePacket(decoded.begin(),decoded.end(), dest);
+  PacketEncoding::encodePacket(decoded.begin(), decoded.end(), dest);
 }
 
 // <summary>
@@ -64,15 +64,54 @@ static void constructWriteRegisterPacket(const RegisterData &data,
                                          OutputIterator dest) {
   std::vector<unsigned char> decoded = {
     static_cast<unsigned char>(PacketHeaders::WRITE_REGISTER),
-    static_cast<unsigned char>(static_cast<unsigned short>(data.address()) >> 8),
+    static_cast<unsigned char>(static_cast<unsigned short>(
+        data.address()) >> 8),
     static_cast<unsigned char>(data.address()),
     static_cast<unsigned char>(data.value() >> 8),
     static_cast<unsigned char>(data.value()),
     0 };
-  
+
   decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
-  
-  PacketEncoding::encodePacket(decoded.begin(),decoded.end(), dest);
+  PacketEncoding::encodePacket(decoded.begin(), decoded.end(), dest);
+}
+
+//  <summary>
+//  Constructs a write date/time packet.
+//  </summary>
+template<typename OutputIterator>
+static void constructWriteDateTimePacket(const DateTimeData& data,
+                                         OOutputIterator dest) {
+  std::vector<unsigned char> decoded = {
+    static_cast<unsigned char>(PacketHeaders::WRITE_DATETIME),
+    static_cast<unsigned char>((((((data.year() - 2000) % 100) / 10) << 4)
+      | (data.year() - 2000 % 10))),
+    static_cast<unsigned char>(((((data.month() % 100) / 10) << 4)
+      | (data.month() % 10))),
+    static_cast<unsigned char>(((((data.day() % 100) / 10) << 4)
+      | (data.day() % 10))),
+    static_cast<unsigned char>(((((data.hours() % 100) / 10) << 4)
+      | (data.hours() % 10))),
+    static_cast<unsigned char>(((((data.minutes() % 100) / 10) << 4)
+      | (data.minutes() % 10))),
+     static_cast<unsigned char>(((((data.seconds() % 100) / 10) << 4)
+      | (data.seconds() % 10))),
+      0
+  };
+  decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
+  PacketEncoding::encodePacket(decoded.begin(), decoded.end(), dest);
+}
+
+//  <summary>
+//  Constructs a read date/time packet.
+//  </summary>
+template<typename OutputIterator>
+static void constructReadDateTimePacket(OutputIterator dest) {
+  std::vector<unsigned char> decoded = {
+    static_cast<unsigned char>(PacketHeaders::READ_DATETIME),
+    0 };
+
+  decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
+  PacketEncoding::encodePacket(decoded.begin(), decoded.end(), dest);
 }
 
 // <summary>
