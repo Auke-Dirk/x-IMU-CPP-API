@@ -4,8 +4,8 @@ x-IMU-CPP-API
 C++11 port of xioTechnologies API.
 This xioTechnologies project is also hosted on github and can be found [here](https://github.com/xioTechnologies/x-IMU-GUI).
 
-Code Snippit
-------------
+Code Snippet: How to use the library
+------------------------------------
 ``` cpp
 
 // Create your own Ximu class by extending the two available
@@ -17,7 +17,7 @@ class XimuIO : public ximu::ReaderBase, public ximu::WriterBase {
     
     // forward encoded data to the IOPort
     virtual void sendSerialBuffer(std::vector<unsigned char>& data) {
-    ..
+        ..
         port.write(data..
     }
     
@@ -25,7 +25,8 @@ class XimuIO : public ximu::ReaderBase, public ximu::WriterBase {
     virtual void recievedQuaternionData(ximu::QuaternionData& q) {
         ..  
     }
-    virtual void recievedCalInertialAndMagneticData( ximu::CalInertialAndMagneticData& data){
+    virtual void recievedCalInertialAndMagneticData(
+    ximu::CalInertialAndMagneticData& data){
         ..        
     }
 };
@@ -60,6 +61,9 @@ For linux:
    1. create a build directory inside "x-IMU-CPP-API"
    2. from this build directory run: cmake ..
    3. from this build directory run: make
+   
+Windows:
+   1. use cmake gui and generate the source for you visual studio version
 
 Test Tool
 -----------
