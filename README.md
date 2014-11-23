@@ -4,6 +4,44 @@ x-IMU-CPP-API
 C++11 port of xioTechnologies API.
 This xioTechnologies project is also hosted on github and can be found [here](https://github.com/xioTechnologies/x-IMU-GUI).
 
+Code Snippit
+------------
+``` cpp
+
+// Create your own Ximu class by extending the two available
+// bases. ReaderBase for reading data from the ximu and WriterBase
+// for writing to the ximu device. 
+class XimuIO : public ximu::ReaderBase, public ximu::WriterBase {
+    ..
+    IOPort port; // os specific not included in this library
+    
+    // forward encoded data to the IOPort
+    virtual void sendSerialBuffer(std::vector<unsigned char>& data) {
+    ..
+        port.write(data..
+    }
+    
+    // implement reciever functions for those datatypes that you are interested in
+    virtual void recievedQuaternionData(ximu::QuaternionData& q) {
+        ..  
+    }
+    virtual void recievedCalInertialAndMagneticData( ximu::CalInertialAndMagneticData& data){
+        ..        
+    }
+};
+
+XimuIO xio;
+
+// writing 
+xio.sendCommandPacket(ximu::CommandCodes::ALGORITHM_CLEAR_TARE);
+xio.sendCommandPacket(ximu::CommandCodes::ALGORITHM_INITIALISE_THEN_TARE);
+..
+
+ximu::DateTimeData dt(..,..);
+xio.sendWriteDateTimePacket(dt);
+```
+
+
 Coding Style
 ------------
 This project holds the [Google code style](http://google-styleguide.googlecode.com/svn/trunk/cppguide.html) guidelines.
