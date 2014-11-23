@@ -15,6 +15,13 @@ class XimuIO : public ximu::ReaderBase, public ximu::WriterBase {
     ..
     IOPort port; // os specific not included in this library
     
+    // often a callback is presented from the IO port
+    void IOPortCallback(char* data, int length) {
+        // two template methods are provided, see reader_base.h        
+        reader.fill(data, length);
+        reader.read();
+    }
+    
     // forward encoded data to the IOPort
     virtual void sendSerialBuffer(std::vector<unsigned char>& data) {
         ..
