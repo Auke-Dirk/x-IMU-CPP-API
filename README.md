@@ -18,8 +18,8 @@ class XimuIO : public ximu::ReaderBase, public ximu::WriterBase {
     // often a callback is presented from the IO port
     void IOPortCallback(char* data, int length) {
         // two template methods are provided, see reader_base.h        
-        reader.fill(data, length);
-        reader.read();
+        fill(data, length);
+        read();
     }
     
     // forward encoded data to the IOPort
