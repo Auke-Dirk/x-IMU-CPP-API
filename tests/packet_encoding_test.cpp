@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
   std::vector<unsigned char> decoded {2, 4, 8, 16, 32, 64, 128};
   // this corresponds to:
   std::vector<unsigned char> encoded {1, 1, 1, 1, 1, 1, 1, 128};
-  // x-imu encoded packet --yes the decoded packet numbers where chosen to
+  // x-imu encoded packet --yes the decoded packet numbers were chosen to
   // illustrate the single bit shift
 
   // the ximu decoding and encoding has an effect on the packet size
