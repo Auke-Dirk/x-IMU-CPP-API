@@ -1,8 +1,8 @@
 x-IMU-CPP-API
 =============
 
-C++11 port of xioTechnologies/x-IMU-GUI and API.
-This project is also hosted on github and can be found [here](https://github.com/xioTechnologies/x-IMU-GUI).
+C++11 port of xioTechnologies API.
+This xioTechnologies project is also hosted on github and can be found [here](https://github.com/xioTechnologies/x-IMU-GUI).
 
 Coding Style
 ------------
