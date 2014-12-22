@@ -11,11 +11,11 @@ unsigned PacketEncoding::decodedPacketSize(unsigned encodedPacketSize) {
   float len = (static_cast<float>(encodedPacketSize) - 0.125f)  / 1.125f;
   return  std::floor(len);
 }
+
 unsigned PacketEncoding::encodedPacketSize(unsigned decodedPacketSize) {
   float len = static_cast<float>(decodedPacketSize) * 1.125f + 0.125f;
   return std::ceil(len);
 }
-
 
 void PacketEncoding::rightShiftBytes(std::vector<unsigned char>& v) {
   size_t size = v.size();
@@ -27,7 +27,6 @@ void PacketEncoding::rightShiftBytes(std::vector<unsigned char>& v) {
     v[idx] >>= 1;
   }
 }
-
 
 void PacketEncoding::leftShiftBytes(std::vector<unsigned char>& v) {
   v.front() <<= 1;

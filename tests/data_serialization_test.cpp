@@ -42,6 +42,8 @@ class ApplicationXimuReader : public ximu::ReaderBase {
       auto acc = c.accelerometer();
       auto gyro = c.gyroscope();
     }
+  virtual void recievedDateTimeData(ximu::DateTimeData& d){
+  }	
 };
 
 int main(int argc, char* argv[]) {

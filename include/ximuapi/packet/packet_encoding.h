@@ -17,7 +17,7 @@ namespace ximu {
 // </summary>
 
 class PacketEncoding{
- public:
+public:
   // <summary>
   // Calculates the size needed to decode a packet.
   // </summary>

@@ -77,7 +77,6 @@ int main(int argc, char* argv[]) {
 
   ximu::PacketEncoding::encodePacket(
       decoded.begin(), 0, back_inserter(encTest));
-
   
   return 0;
 }

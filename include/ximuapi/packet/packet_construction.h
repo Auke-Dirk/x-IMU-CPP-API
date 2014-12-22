@@ -84,10 +84,10 @@ static void constructWriteDateTimePacket(const DateTimeData& data,
   std::vector<unsigned char> decoded = {
     static_cast<unsigned char>(PacketHeaders::WRITE_DATETIME),
     static_cast<unsigned char>((((((data.year() - 2000) % 100) / 10) << 4)
-      | (data.year() - 2000 % 10))),
+      | (data.year() - 2000) % 10)),
     static_cast<unsigned char>(((((data.month() % 100) / 10) << 4)
       | (data.month() % 10))),
-    static_cast<unsigned char>(((((data.day() % 100) / 10) << 4)
+    static_cast<unsigned char>(((((data.day() % 100) / 10) << 4)	
       | (data.day() % 10))),
     static_cast<unsigned char>(((((data.hours() % 100) / 10) << 4)
       | (data.hours() % 10))),

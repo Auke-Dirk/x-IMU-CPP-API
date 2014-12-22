@@ -38,7 +38,8 @@ class PacketReader {
   virtual void recievedQuaternionData(QuaternionData& q) = 0;
   virtual void recievedCalInertialAndMagneticData(
     CalInertialAndMagneticData& c) = 0;
-
+  virtual void recievedDateTimeData(DateTimeData& d) = 0; 
+    
   // Read the input buffer
   template<typename InputIterator>
   ReadResult read(InputIterator begin, InputIterator end) {
@@ -72,6 +73,10 @@ class PacketReader {
       case PacketHeaders::QUATERNION_DATA:
         if (readQuaternionData(buffer.begin(), buffer.end()))
           return ReadResult::OKE;
+
+      case PacketHeaders::WRITE_DATETIME:
+	if (readWriteDateTime(buffer.begin(),buffer.end()))
+	  return ReadResult::OKE;
     }
     return ReadResult::NOT_IMPLEMENTED;
   }
@@ -95,7 +100,7 @@ class PacketReader {
   }
 
   //  <summary>
-  //  Tries to construct a QuaternionData type
+  //  Tries to construct a Read-Intertial and Magnetic data type
   //  from a collection of unsigned chars
   //  </summary>
   template<typename InputIterator>
@@ -128,6 +133,26 @@ class PacketReader {
 
     return true;
   }
+  // <summary>
+  // Tries to construct a Write DateTimeData packet
+  // </summary>
+  template<typename InputIterator>
+  bool readWriteDateTime(InputIterator begin,InputIterator end) {
+  
+    ximu::DateTimeData data(
+      (10 * ((begin[1] & 0xF0) >> 4) + begin[1] & 0x0F) + 2000,
+      (10 * ((begin[2] & 0xF0) >> 4) + begin[2] & 0x0F),
+      (10 * ((begin[3] & 0xF0) >> 4) + begin[3] & 0x0F),
+      (10 * ((begin[4] & 0xF0) >> 4) + begin[4] & 0x0F),
+      (10 * ((begin[5] & 0xF0) >> 4) + begin[5] & 0x0F),
+      (10 * ((begin[6] & 0xF0) >> 4) + begin[6] & 0x0F)
+    );
+    
+    // pass on
+    recievedDateTimeData(data);
+    return true;
+  }
+  
   // obtain the number of bytes used for this packet
   size_t PacketSize(ximu::PacketHeaders header);
 };

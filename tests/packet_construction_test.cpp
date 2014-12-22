@@ -10,6 +10,7 @@
 #include "ximuapi/enumerations.h"
 #include "ximuapi/packet/packet_construction.h"
 #include "ximuapi/data/register_data.h"
+#include "ximuapi/data/datetime_data.h"
 
 // Example/test on constructing commands
 int main(int argc, char* argv[]) {
@@ -40,7 +41,7 @@ int main(int argc, char* argv[]) {
   // Constucting RegisterData read/write 
   // write packet
   ximu::RegisterData r1(ximu::reg::RegisterAddresses::ADXL_345C_SENSITIVITY_X,11.0f);
-  std::vector<unsigned char> r1Enc {1, 64, 12, 32,  22, 0, 206};
+  std::vector<unsigned char> r1Enc {1, 64, 12, 32,  22, 0, 206};	
   std::vector<unsigned char> r1Test;
   ximu::PacketConstruction::constructWriteRegisterPacket(r1,back_inserter(r1Test));
 
@@ -57,7 +58,16 @@ int main(int argc, char* argv[]) {
   if (r2Test != r2Enc)
     return 1;
 
+  // Constucting of the DateTimeData
+  std::vector<unsigned char> dtd1Enc {2, 69, 2, 32, 56, 64, 74, 48, 75, 192};
+  std::vector<unsigned char> dtd1Test;
+  ximu::DateTimeData dtd1(2014, 12, 07, 10, 25, 30);
+  ximu::PacketConstruction::constructWriteDateTimePacket(dtd1,back_inserter(dtd1Test));
   
-
+  if (dtd1Enc != dtd1Test)
+    return 1;
+ 
+  
+  
   return 0;
 }
