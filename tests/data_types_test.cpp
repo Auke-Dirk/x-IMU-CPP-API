@@ -13,6 +13,7 @@
 #include "ximuapi/data/quaternion_data.h"
 #include "ximuapi/data/vector3.h"
 #include "ximuapi/data/cal_inertial_and_magnetic_data.h"
+#include "ximuapi/data/digital_port_bits.h"
 
 
 // Example/test on constructing commands
@@ -139,9 +140,43 @@ int main(int argc, char* argv[]) {
       
     return 1;
   }
-    
   
   
+  /////////////////////////////////
+  // 	Digital Port Bits	 //
+  /////////////////////////////////
+  ximu::DigitalPortBits dpb1(false,false,false,false,false,false,false,false);
+  ximu::DigitalPortBits dpb2(true,true,true,true,true,true,true,true);
+  
+  for (size_t portIndex = 0; portIndex != 8; ++portIndex) {
+    if (dpb1.get(portIndex))
+      return 1;
+    if (!dpb2.get(portIndex))
+      return 1;
+  }
+  
+  if (dpb1.byte() != 0 || dpb2.byte() != 255)
+    return 1;
+  if (dpb1 != ximu::DigitalPortBits(0) || dpb2 != ximu::DigitalPortBits(255) || dpb1 == dpb2)
+    return 1;
+  
+  
+  if (dpb1.ax0() || !dpb2.ax0())
+    return 1;
+  if (dpb1.ax1() || !dpb2.ax1())
+    return 1;
+  if (dpb1.ax2() || !dpb2.ax2())
+    return 1;
+  if (dpb1.ax3() || !dpb2.ax3())
+    return 1;
+  if (dpb1.ax4() || !dpb2.ax4())
+    return 1;
+  if (dpb1.ax5() || !dpb2.ax5())
+    return 1;
+  if (dpb1.ax6() || !dpb2.ax6())
+    return 1;
+   if (dpb1.ax7() || !dpb2.ax7())
+    return 1;
   
   return 0;
 }
