@@ -1,7 +1,7 @@
 x-IMU-CPP-API
 =============
 
-C++11 port of xioTechnologies API.
+C++11 port of xioTechnologies API ( c++ ximu ).
 This xioTechnologies project is also hosted on github and can be found [here](https://github.com/xioTechnologies/x-IMU-GUI).
 
 Code Snippet: *how to use the library*
@@ -18,8 +18,8 @@ class XimuIO : public ximu::ReaderBase, public ximu::WriterBase {
     // often a callback is presented from the IO port
     void IOPortCallback(char* data, int length) {
         // two template methods are provided, see reader_base.h        
-        reader.fill(data, length);
-        reader.read();
+        fill(data, length);
+        read();
     }
     
     // forward encoded data to the IOPort
