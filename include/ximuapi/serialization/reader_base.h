@@ -10,6 +10,7 @@
 #include "ximuapi/data/quaternion_data.h"
 #include "ximuapi/data/datetime_data.h"
 #include "ximuapi/data/register_data.h"
+#include "ximuapi/data/digital_io_data.h"
 #include "ximuapi/serialization/packet_reader.h"
 
 namespace ximu {
@@ -61,6 +62,7 @@ class ReaderBase : protected PacketReader {
   virtual void recievedRegisterData(RegisterData& r);
   virtual void recievedCalInertialAndMagneticData(
     CalInertialAndMagneticData& c);
+  virtual void recievedDigitalIOData(DigitalIOData& diod);
 };
 
 }  // namespace ximu

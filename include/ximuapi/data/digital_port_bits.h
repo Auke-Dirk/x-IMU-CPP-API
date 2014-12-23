@@ -22,6 +22,7 @@ class DigitalPortBits {
   explicit DigitalPortBits(unsigned char data);
   DigitalPortBits(bool ax0, bool ax1, bool ax2, bool ax3,
                   bool ax4, bool ax5, bool ax6, bool ax7);
+  DigitalPortBits(const DigitalPortBits& other);
   // <summary>
   // returns the port bits as a byte
   // </summary>

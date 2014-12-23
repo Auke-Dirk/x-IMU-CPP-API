@@ -14,7 +14,7 @@
 #include "ximuapi/data/vector3.h"
 #include "ximuapi/data/cal_inertial_and_magnetic_data.h"
 #include "ximuapi/data/digital_port_bits.h"
-
+#include "ximuapi/data/digital_io_data.h"
 
 // Example/test on constructing commands
 int main(int argc, char* argv[]) {
@@ -176,6 +176,15 @@ int main(int argc, char* argv[]) {
   if (dpb1.ax6() || !dpb2.ax6())
     return 1;
    if (dpb1.ax7() || !dpb2.ax7())
+    return 1;
+  
+  /////////////////////
+  // Digital IO Data //
+  /////////////////////
+  ximu::DigitalIOData diod1(dpb1,dpb2);
+  if (diod1.direction() != dpb1)
+    return 1;
+  if (diod1.state() != dpb2)
     return 1;
   
   return 0;

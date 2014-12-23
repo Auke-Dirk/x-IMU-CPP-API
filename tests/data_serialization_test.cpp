@@ -18,7 +18,8 @@ class ApplicationXimuReader : public ximu::ReaderBase {
  public:
   ApplicationXimuReader()
   :
-      _quatCount(0), _calInAndMagCount(0) {
+      _quatCount(0), _calInAndMagCount(0),
+      _digitalIOCount(0) {
   }
   size_t QuaternionCount() {
     return _quatCount;
@@ -31,7 +32,8 @@ class ApplicationXimuReader : public ximu::ReaderBase {
  private:
   size_t _quatCount;
   size_t _calInAndMagCount;
-
+  size_t _digitalIOCount;
+  
   virtual void recievedQuaternionData(ximu::QuaternionData& q) {
       ++_quatCount;
   }
@@ -43,7 +45,10 @@ class ApplicationXimuReader : public ximu::ReaderBase {
       auto gyro = c.gyroscope();
     }
   virtual void recievedDateTimeData(ximu::DateTimeData& d){
-  }	
+  }
+  virtual void recievedDigitalIOData(ximu::DigitalIOData& diod) {
+    ++_digitalIOCount;
+  }
 };
 
 int main(int argc, char* argv[]) {

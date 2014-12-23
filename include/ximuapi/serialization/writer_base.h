@@ -10,7 +10,7 @@
 #include "ximuapi/data/quaternion_data.h"
 #include "ximuapi/data/datetime_data.h"
 #include "ximuapi/data/register_data.h"
-
+#include "ximuapi/data/digital_io_data.h"
 
 namespace ximu {
 
@@ -30,6 +30,7 @@ class WriterBase {
   void sendReadDateTimePacket();
   void sendWriteDateTimePacket(DateTimeData& d);
   void sendCommandPacket(CommandCodes code);
+  void sendDigitalIOPacket(DigitalIOData& d);
 };
 
 }  // namespace ximu

@@ -13,6 +13,7 @@
 #include "ximuapi/packet/packet_encoding.h"
 #include "ximuapi/data/register_data.h"
 #include "ximuapi/data/datetime_data.h"
+#include "ximuapi/data/digital_io_data.h"
 
 namespace ximu {
 
@@ -110,6 +111,23 @@ static void constructReadDateTimePacket(OutputIterator dest) {
     static_cast<unsigned char>(PacketHeaders::READ_DATETIME),
     0 };
 
+  decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
+  PacketEncoding::encodePacket(decoded.begin(), decoded.end(), dest);
+}
+
+// <summary
+// Constructs an encoded digital I/O packet.
+// </summary>
+template<typename OutputIterator>
+static void constructDigitalIOPacket(
+  const DigitalIOData& diod,
+  OutputIterator dest) {
+  std::vector<unsigned char> decoded = {
+    static_cast<unsigned char>(PacketHeaders::DIGITAL_IO_DATA),
+    0x00, 
+    diod.state().byte(),
+    0
+  };
   decoded.back() = checksum(decoded.begin(), decoded.size() - 1);
   PacketEncoding::encodePacket(decoded.begin(), decoded.end(), dest);
 }

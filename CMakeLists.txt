@@ -22,6 +22,7 @@ add_library(X-IMU-API STATIC
   src/ximuapi/data/register_data.cpp
   src/ximuapi/data/datetime_data.cpp
   src/ximuapi/data/digital_port_bits.cpp
+  src/ximuapi/data/digital_io_data.cpp
   src/ximuapi/data/cal_inertial_and_magnetic_data.cpp
   src/ximuapi/serialization/reader_base.cpp
   src/ximuapi/serialization/packet_reader.cpp

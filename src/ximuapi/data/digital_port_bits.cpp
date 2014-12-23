@@ -18,6 +18,11 @@ DigitalPortBits::DigitalPortBits(unsigned char data)
 {}
 
 DigitalPortBits::DigitalPortBits(
+  const DigitalPortBits& other) {
+  _data = other.byte();
+}
+
+DigitalPortBits::DigitalPortBits(
     bool ax0, bool ax1, bool ax2, bool ax3,
     bool ax4, bool ax5, bool ax6, bool ax7) {
   set(ax0, 0);

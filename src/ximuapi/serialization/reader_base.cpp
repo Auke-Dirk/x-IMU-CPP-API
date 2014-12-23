@@ -57,4 +57,5 @@ void ReaderBase::recievedDatTimeData(DateTimeData& d) {}
 void ReaderBase::recievedRegisterData(RegisterData& r) {}
 void ReaderBase::recievedCalInertialAndMagneticData(
     CalInertialAndMagneticData& c) {}
+void ReaderBase::recievedDigitalIOData(DigitalIOData& diod){}
 }  // namespace ximu

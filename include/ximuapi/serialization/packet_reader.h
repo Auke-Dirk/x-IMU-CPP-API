@@ -12,6 +12,7 @@
 #include "ximuapi/data/quaternion_data.h"
 #include "ximuapi/data/datetime_data.h"
 #include "ximuapi/data/register_data.h"
+#include "ximuapi/data/digital_io_data.h"
 #include "ximuapi/data/cal_inertial_and_magnetic_data.h"
 #include "ximuapi/data/vector3.h"
 #include "ximuapi/utils/utility.h"
@@ -38,7 +39,8 @@ class PacketReader {
   virtual void recievedQuaternionData(QuaternionData& q) = 0;
   virtual void recievedCalInertialAndMagneticData(
     CalInertialAndMagneticData& c) = 0;
-  virtual void recievedDateTimeData(DateTimeData& d) = 0; 
+  virtual void recievedDateTimeData(DateTimeData& d) = 0;
+  virtual void recievedDigitalIOData(DigitalIOData& diod) = 0;
     
   // Read the input buffer
   template<typename InputIterator>
@@ -77,6 +79,10 @@ class PacketReader {
       case PacketHeaders::WRITE_DATETIME:
 	if (readWriteDateTime(buffer.begin(),buffer.end()))
 	  return ReadResult::OKE;
+    
+      case PacketHeaders::DIGITAL_IO_DATA:
+	if (readDigitalIOData(buffer.begin(),buffer.end()))
+	    return ReadResult::OKE;
     }
     return ReadResult::NOT_IMPLEMENTED;
   }
@@ -150,6 +156,16 @@ class PacketReader {
     
     // pass on
     recievedDateTimeData(data);
+    return true;
+  }
+
+  // <summary>
+  // Tries to construct a digital io data packet
+  // </summary>
+  template<typename InputIterator>
+  bool readDigitalIOData(InputIterator begin, InputIterator end) {
+    DigitalIOData diod(begin[1],begin[2]);
+    recievedDigitalIOData(diod);
     return true;
   }
   
