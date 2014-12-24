@@ -19,7 +19,7 @@ namespace ximu {
 
 // <summary>
 // Packet construction class. Contains static methods for packet
-// construction and deconstruction.
+// construction.
 // </summary>
 
 class PacketConstruction {
