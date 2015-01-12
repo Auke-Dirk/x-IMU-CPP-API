@@ -15,7 +15,10 @@
 #include "ximuapi/data/register_data.h"
 #include "ximuapi/data/digital_io_data.h"
 #include "ximuapi/data/cal_inertial_and_magnetic_data.h"
+#include "ximuapi/data/adxl_345_bus_data.h"
+#include "ximuapi/data/analogue_input_data.h"
 #include "ximuapi/data/vector3.h"
+#include "ximuapi/data/pwm_output_data.h"
 #include "ximuapi/utils/utility.h"
 #include "ximuapi/utils/fixed_float.h"
 
@@ -42,7 +45,12 @@ class PacketReader {
     CalInertialAndMagneticData& c) = 0;
   virtual void recievedDateTimeData(DateTimeData& d) = 0;
   virtual void recievedDigitalIOData(DigitalIOData& diod) = 0;
-    
+  virtual void recievedCalAdxl345BusData(CalAdxl345BusData& adxl) = 0;
+  virtual void recievedRawAdxl345BusData(RawAdxl345BusData& adxl) = 0;
+  virtual void recievedPWMOutputData(PWMOutputData& pwm) = 0;
+  virtual void recievedCalAnalogueInputData(CalAnalogueInputData& ad) = 0; 
+  virtual void recievedRawAnalogueInputData(RawAnalogueInputData& ad) = 0;
+  
   // Read the input buffer
   template<typename InputIterator>
   ReadResult read(InputIterator begin, InputIterator end) {
@@ -94,6 +102,46 @@ class PacketReader {
 	auto did = PacketDeconstruction::deconstructDigitalIOData(
 	  buffer.begin(),buffer.end());
 	recievedDigitalIOData(did);
+	return ReadResult::OKE;
+      }
+      
+      case PacketHeaders::CAL_ADXL_345_BUS_DATA:
+      {
+	auto adxl = PacketDeconstruction::deconstructCalAdxl345BusData
+	  (buffer.begin(),buffer.end());
+	recievedCalAdxl345BusData(adxl);
+	return ReadResult::OKE;
+      }
+      
+      case PacketHeaders::RAW_ADXL_345_BUS_DATA:
+      {
+	auto adxl = PacketDeconstruction::deconstructRawAdxl345BusData
+	  (buffer.begin(),buffer.end());
+	recievedRawAdxl345BusData(adxl);
+	return ReadResult::OKE;
+      }
+      
+      case PacketHeaders::PWM_OUTPUT_DATA:
+      {
+	auto pwm = PacketDeconstruction::deconstructPWMOutputData
+	(buffer.begin(),buffer.end());
+	recievedPWMOutputData(pwm);
+	return ReadResult::OKE;
+      }
+      
+      case PacketHeaders::CAL_ANALOGUE_INPUT_DATA:
+      {
+	auto anl = PacketDeconstruction::deconstructCalAnalogueInputData
+	(buffer.begin(),buffer.end());
+	recievedCalAnalogueInputData(anl);
+	return ReadResult::OKE;
+      }
+      
+      case PacketHeaders::RAW_ANALOGUE_INPUT_DATA:
+      {
+	auto anl = PacketDeconstruction::deconstructRawAnalogueInputData
+	(buffer.begin(),buffer.end());
+	recievedRawAnalogueInputData(anl);
 	return ReadResult::OKE;
       }
     }

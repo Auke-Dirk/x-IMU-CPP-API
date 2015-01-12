@@ -63,6 +63,12 @@ class ReaderBase : protected PacketReader {
   virtual void recievedCalInertialAndMagneticData(
     CalInertialAndMagneticData& c);
   virtual void recievedDigitalIOData(DigitalIOData& diod);
+  virtual void recievedCalAdxl345BusData(CalAdxl345BusData& adxl);
+  virtual void recievedRawAdxl345BusData(RawAdxl345BusData& adxl);
+  virtual void recievedPWMOutputData(PWMOutputData& pwm);
+  virtual void recievedCalAnalogueInputData(CalAnalogueInputData& ad); 
+  virtual void recievedRawAnalogueInputData(RawAnalogueInputData& ad); 
+  
 };
 
 }  // namespace ximu

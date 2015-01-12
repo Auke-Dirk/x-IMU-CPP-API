@@ -13,14 +13,14 @@ namespace ximu {
 class Utility {
  public:
   // Tests if the query falls within the range, [x1,x2,x3]
-  template<typename T, typename T2>
-  static bool isWithinInclIncl(T lhs, T rhs, T2 query) {
+  template<typename T1, typename T2>
+  static bool isWithinInclIncl(T1 lhs, T1 rhs, T2 query) {
     return query >= lhs && query <= rhs;
   }
 
   // Tests if the query falls within the range, <x1,x2,x3>
-  template<typename T, typename T2>
-  static bool isWithinExclExcl(T lhs, T rhs, T2 query) {
+  template<typename T1, typename T2>
+  static bool isWithinExclExcl(T1 lhs, T1 rhs, T2 query) {
     return query > lhs && query < rhs;
   }
 
