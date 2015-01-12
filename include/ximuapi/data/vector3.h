@@ -17,7 +17,7 @@ class Vector3 {
   T _y;
   T _z;
 
- public:
+ public: 
   Vector3(const Vector3& other)
     :
      _x(other.x()),
@@ -53,6 +53,7 @@ class Vector3 {
 
 typedef Vector3<float> Vector3f;
 typedef Vector3<double> Vector3d;
+typedef Vector3<short> Vector3s;
 }  // namespace ximu
 
 #endif  // INCLUDE_XIMUAPI_DATA_VECTOR3_H_
