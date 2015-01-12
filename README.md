@@ -103,10 +103,7 @@ Ported File List
 |[DigitalPortBits.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/DigitalPortBits.cs) |[digital_port_bits.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/digital_port_bits.h) | [data_types_test.cpp](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/tests/data_types_test.cpp) |
 | [DigitalIOdata.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/DigitalIOdata.cs) | [digital_io_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/digital_io_data.h) | [data_types_test.cpp](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/tests/data_types_test.cpp) |
 |[PWMOutputData.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/PWMoutputData.cs) | [pwm_output_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/pwm_output_data.h)| | 
-|[CalADXL345busData.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/CalADXL345busData.cs)|[adxl_345_bus_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/adxl_345_bus_data.h) |
-|
+|[CalADXL345busData.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/CalADXL345busData.cs)|[adxl_345_bus_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/adxl_345_bus_data.h) ||
 |[RawADXL345busData.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/RawADXL345busData.cs) |[adxl_345_bus_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/adxl_345_bus_data.h) |
-|[CalAnalogueInputData.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/CalAnalogueInputData.cs) | [analogue_input_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/analogue_input_data.h) |
-|
-|[RawAnalogueInputData.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/RawAnalogueInputData.cs) | [analogue_input_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/analogue_input_data.h) |
-|
+|[CalAnalogueInputData.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/CalAnalogueInputData.cs) | [analogue_input_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/analogue_input_data.h) ||
+|[RawAnalogueInputData.cs](https://github.com/xioTechnologies/x-IMU-GUI/blob/master/x-IMU%20API/RawAnalogueInputData.cs) | [analogue_input_data.h](https://github.com/Auke-Dirk/x-IMU-CPP-API/blob/master/include/ximuapi/data/analogue_input_data.h) ||
