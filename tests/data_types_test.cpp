@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
     return 1;
 
   // euler angles
-  std::vector<float> eulerAngles1 = {78.690, -47.166, 168.690};
+  std::vector<float> eulerAngles1 = {78.690f, -47.166f, 168.690f};
   std::vector<float> eulerAngles2 = q5.eulerAngles();
 
   if (!ximu::Utility::isWithinError(eulerAngles1, eulerAngles2, 0.001f))
@@ -108,9 +108,9 @@ int main(int argc, char* argv[]) {
 
   // rotation matrix
   std::vector<float> rotationMatrix = {
-    -0.666, 0.666, 0.333,
-    0.133, -0.333, 0.933,
-    0.733, 0.666, 0.133
+    -0.666f, 0.666f, 0.333f,
+    0.133f, -0.333f, 0.933f,
+    0.733f, 0.666f, 0.133f
   };
 
   float a= rotationMatrix[6];

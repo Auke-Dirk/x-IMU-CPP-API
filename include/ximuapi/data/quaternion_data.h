@@ -15,24 +15,24 @@
 namespace ximu {
 
 
-// <summary>
-// Quaternion data class.
-// </summary>
-// <remarks>
-// See http://www.x-io.co.uk/res/doc/quaternions.pdf for more information on
-// quaternions.
-// </remarks>
+/*! \brief Quaternion data class.
+	The Quaternion data class, for its detailed description see 
+	 http://www.x-io.co.uk/res/doc/quaternions.pdf.
+*/
 template<typename T>
 class Quaternion {
- private:
-  std::vector<T> _quaternion;
+ private:  
   T _w;
   T _x;
   T _y;
   T _z;
 
  public:
-// Constructors
+
+ /*! \brief default constructor
+	Contructs a default Quaternion in which the W component is set to one,
+	whilst the X,Y,Z are set to zero.
+ */
   Quaternion()
     :
   _w(static_cast<T>(1)),
@@ -41,7 +41,10 @@ class Quaternion {
   _z(static_cast<T>(0)) {
   }
 
-
+ /*! \brief Constructor
+	Contructs a Quaternion based on the four input variables.
+	This constructor does not automatically normalize the Quaternion.
+ */
   Quaternion(T w, T x , T y, T z)
     :
   _w(w), _x(x), _y(y), _z(z) {

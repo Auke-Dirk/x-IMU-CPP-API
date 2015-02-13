@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
-
+#include <algorithm>
+#include <iterator>
 /*
   Copyright 2014 Auke-Dirk Pietersma
 */

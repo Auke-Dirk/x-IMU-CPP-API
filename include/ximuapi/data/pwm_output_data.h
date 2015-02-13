@@ -8,12 +8,12 @@
 #include "four_channel_data.h"
 
 namespace ximu {
-class PWMOutputData : protected FourChannelData<ushort>
+class PWMOutputData : protected FourChannelData<unsigned short>
 {
 public:
-PWMOutputData(ushort a0, ushort a2, ushort a4, ushort a6 ) 
+PWMOutputData(unsigned short a0, unsigned short a2, unsigned short a4, unsigned short a6 ) 
 :
-  FourChannelData<ushort>(a0,a2,a4,a6)
+  FourChannelData<unsigned short>(a0,a2,a4,a6)
   {}
 
 };

@@ -5,6 +5,7 @@
 #ifndef INCLUDE_XIMUAPI_UTILS_UTILITY_H_
 #define INCLUDE_XIMUAPI_UTILS_UTILITY_H_
 
+#include <numeric>
 #include <algorithm>
 #include <vector>
 

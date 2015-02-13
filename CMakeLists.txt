@@ -15,6 +15,19 @@ include_directories(
   include # main include directory
 )
 
+if(DOXYGEN_FOUND)
+# add a target to generate API documentation with Doxygen
+find_package(Doxygen)
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+	add_custom_target(
+		documentation ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		COMMENT "Generating API documentation with Doxygen" VERBATIM
+	)
+endif(DOXYGEN_FOUND)
+
+
+
 # add functionality to the library
 add_library(X-IMU-API STATIC
   src/ximuapi/packet/packet_encoding.cpp
