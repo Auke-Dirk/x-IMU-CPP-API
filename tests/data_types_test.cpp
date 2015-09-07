@@ -19,16 +19,17 @@ Copyright 2014 Auke-Dirk Pietersma
 #include "ximuapi/data/digital_io_data.h"
 #include "ximuapi/data/raw_battery_and_thermometer_data.h"
 #include "ximuapi/data/cal_battery_and_thermometer_data.h"
-
-#include "ximuapi\data\analogue_input_data.h"
-#include "ximuapi\data\adxl_345_bus_data.h"
-#include "ximuapi\data\pwm_output_data.h"
+#include "ximuapi/data/analogue_input_data.h"
+#include "ximuapi/data/adxl_345_bus_data.h"
+#include "ximuapi/data/pwm_output_data.h"
 
 
 
 bool CompareFloates(float A, float B)
 {
-	return (A - B < FLT_EPSILON) && (-(A - B) < FLT_EPSILON);
+  return (A - B < std::numeric_limits<float>::epsilon()) 
+    && 
+    (-(A - B) < std::numeric_limits<float>::epsilon());
 }
 
 // Example/test on constructing commands
