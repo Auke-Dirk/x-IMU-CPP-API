@@ -12,6 +12,7 @@ set(X-IMU-API_MAJOR_VERION 0)
 set(X-IMU-API_MINOR_VERION 1)
 set(X-IMU-API_PATCH_VERION 0)
 
+
 # set compiler flags
 set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -std=c++11")
 
@@ -19,6 +20,8 @@ set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -std=c++11")
 include_directories(
   include # main include directory
 )
+
+find_package (Threads)
 
 
 # As moc files are generated in the binary dir, tell CMake
@@ -29,7 +32,7 @@ find_package(Qt5Widgets)
 if (Qt5Widgets_FOUND)
     include_directories(${Qt5Widgets_INCLUDE_DIRS})
     add_definitions(${Qt5Widgets_DEFINITIONS})
-    set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -std=c++11 ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 endif(Qt5Widgets_FOUND)
 
 
@@ -83,7 +86,6 @@ add_executable (DATA_SERIZ_WRITE tests/data_serial_writer_test.cpp)
 # if QT found build the tests
 if (Qt5Widgets_FOUND)
     qt5_wrap_cpp(MOC_HEADERS include/ximugui/widgets/simplewindow.h)
-message(${MOC_HEADERS})
     qt5_wrap_ui(UI_HEADERS src/ximugui/widgets/simplewindow.ui)
     add_executable (QT_WINDOW_TEST tests/qt_window_test.cpp src/ximugui/widgets/simplewindow.cpp ${UI_HEADERS} ${MOC_HEADERS})
 endif (Qt5Widgets_FOUND)
@@ -99,7 +101,7 @@ target_link_libraries(DATA_SERIZ_WRITE X-IMU-API)
 
 # if QT found build the tests
 if (Qt5Widgets_FOUND)
-    target_link_libraries(QT_WINDOW_TEST X-IMU-API Qt5::Widgets)
+    target_link_libraries(QT_WINDOW_TEST X-IMU-API Qt5::Widgets ${CMAKE_THREAD_LIBS_INIT})
 endif (Qt5Widgets_FOUND)
 
 # add ximu port dump for as test data
