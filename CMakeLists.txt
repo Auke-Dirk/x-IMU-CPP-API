@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(X-IMU-API)
 
+# Policy for using X::Y
+if(POLICY CMP0020)
+  cmake_policy(SET CMP0020 NEW)
+endif()
+
 enable_testing()
 
 set(X-IMU-API_MAJOR_VERION 0)
@@ -14,10 +19,25 @@ set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -std=c++11")
 include_directories(
   include # main include directory
 )
+
+
+# As moc files are generated in the binary dir, tell CMake
+# to always look for includes there:
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+find_package(Qt5Widgets)
+if (Qt5Widgets_FOUND)
+    include_directories(${Qt5Widgets_INCLUDE_DIRS})
+    add_definitions(${Qt5Widgets_DEFINITIONS})
+    set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+endif(Qt5Widgets_FOUND)
+
+
+
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-	set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
+    set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
     set(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
     configure_file(${doxyfile_in} ${doxyfile} @ONLY)
@@ -60,6 +80,14 @@ add_executable (DATA_TYPES_TEST tests/data_types_test.cpp)
 add_executable (DATA_SERIZ_READ tests/data_serialization_test.cpp)
 add_executable (DATA_SERIZ_WRITE tests/data_serial_writer_test.cpp)
 
+# if QT found build the tests
+if (Qt5Widgets_FOUND)
+    qt5_wrap_cpp(MOC_HEADERS include/ximugui/widgets/simplewindow.h)
+message(${MOC_HEADERS})
+    qt5_wrap_ui(UI_HEADERS src/ximugui/widgets/simplewindow.ui)
+    add_executable (QT_WINDOW_TEST tests/qt_window_test.cpp src/ximugui/widgets/simplewindow.cpp ${UI_HEADERS} ${MOC_HEADERS})
+endif (Qt5Widgets_FOUND)
+
 
 # link the x-IMU-API with the programs
 target_link_libraries(PKT_ENC_TEST X-IMU-API)
@@ -68,6 +96,11 @@ target_link_libraries(FXD_FLT_TEST X-IMU-API)
 target_link_libraries(DATA_TYPES_TEST X-IMU-API)
 target_link_libraries(DATA_SERIZ_READ X-IMU-API)
 target_link_libraries(DATA_SERIZ_WRITE X-IMU-API)
+
+# if QT found build the tests
+if (Qt5Widgets_FOUND)
+    target_link_libraries(QT_WINDOW_TEST X-IMU-API Qt5::Widgets)
+endif (Qt5Widgets_FOUND)
 
 # add ximu port dump for as test data
 configure_file(data/ximu.dmp ximu.dmp COPYONLY)
@@ -79,3 +112,6 @@ add_test(FIXED_FLOAT FXD_FLT_TEST)
 add_test(DATA_TYPES DATA_TYPES_TEST)
 add_test(DATA_DESERIALIZER_RECIEVER DATA_SERIZ_READ)
 add_test(DATA_DESERIALIZER_SENDER DATA_SERIZ_WRITE)
+if (Qt5Widgets_FOUND)
+    add_test(QT_WINDOW QT_WINDOW_TEST)
+endif (Qt5Widgets_FOUND)
