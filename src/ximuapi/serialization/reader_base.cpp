@@ -53,14 +53,14 @@ void ReaderBase::read() {
 }
 
 void ReaderBase::recievedQuaternionData(QuaternionData& q) {}
-void ReaderBase::recievedDatTimeData(DateTimeData& d) {}
+void ReaderBase::recievedDateTimeData(DateTimeData& d) {}
 void ReaderBase::recievedRegisterData(RegisterData& r) {}
 void ReaderBase::recievedCalInertialAndMagneticData(
     CalInertialAndMagneticData& c) {}
 void ReaderBase::recievedDigitalIOData(DigitalIOData& diod){}
-void ReaderBase::recievedCalAdxl345BusData(CalAdxl345BusData& adxl) {};
-void ReaderBase::recievedRawAdxl345BusData(RawAdxl345BusData& adxl) {};
+void ReaderBase::recievedCalAdxl345BusData(CalAdxl345BusData& adxl) {}
+void ReaderBase::recievedRawAdxl345BusData(RawAdxl345BusData& adxl) {}
 void ReaderBase::recievedPWMOutputData(PWMOutputData& pwm) {}
-void ReaderBase::recievedCalAnalogueInputData(CalAnalogueInputData& ad) {}; 
-void ReaderBase::recievedRawAnalogueInputData(RawAnalogueInputData& ad) {}; 
+void ReaderBase::recievedCalAnalogueInputData(CalAnalogueInputData& ad) {}
+void ReaderBase::recievedRawAnalogueInputData(RawAnalogueInputData& ad) {}
 }  // namespace ximu

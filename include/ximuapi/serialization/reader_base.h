@@ -58,7 +58,7 @@ class ReaderBase : protected PacketReader {
   // implement/override the following methods to obtain the
   // Ximu Data objects
   virtual void recievedQuaternionData(QuaternionData& q);
-  virtual void recievedDatTimeData(DateTimeData& d);
+  virtual void recievedDateTimeData(DateTimeData& d);
   virtual void recievedRegisterData(RegisterData& r);
   virtual void recievedCalInertialAndMagneticData(
     CalInertialAndMagneticData& c);
