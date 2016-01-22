@@ -24,7 +24,8 @@ include_directories(
 
 # For arm locate Threads
 string ( TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" CMAKE_SYSTEM_PROCESSOR_LOWERCASE)
-if ("$CMAKE_SYSTEM_PROCESSOR_LOWERCASE$" MATCHES "arm")
+if ("${CMAKE_SYSTEM_PROCESSOR_LOWERCASE}$" MATCHES ".*arm.*")
+  MESSAGE("On a arm machine")
     find_package (Threads)
 endif()
 
