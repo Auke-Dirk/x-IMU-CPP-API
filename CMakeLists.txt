@@ -8,9 +8,9 @@ endif()
 
 enable_testing()
 
-set(X-IMU-API_MAJOR_VERION 0)
-set(X-IMU-API_MINOR_VERION 1)
-set(X-IMU-API_PATCH_VERION 0)
+set(X_IMU_API_MAJOR_VERION 0)
+set(X_IMU_API_MINOR_VERION 1)
+set(X_IMU_API_PATCH_VERION 0)
 
 
 # set compiler flags
@@ -22,19 +22,25 @@ include_directories(
   include # main include directory
 )
 
-SET(CMAKE_AUTOUIC ON)
+# For arm locate Threads
+string ( TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" CMAKE_SYSTEM_PROCESSOR_LOWERCASE)
+if ("$CMAKE_SYSTEM_PROCESSOR_LOWERCASE$" MATCHES "arm")
+    find_package (Threads)
+endif()
 
-MESSAGE(${CMAKE_SYSTEM_PROCESSOR})
-
-# uncomment for arm
-# find_package (Threads)
 
 
 # As moc files are generated in the binary dir, tell CMake
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+find_package(Qt5SerialPort)
 find_package(Qt5Widgets)
+
+set(X_IMU_GUI_UI)
+set(X_IMU_GUI_H)
+set(X_IMU_GUI_SRC)
+
 if (Qt5Widgets_FOUND)
     include_directories(${Qt5Widgets_INCLUDE_DIRS})
     add_definitions(${Qt5Widgets_DEFINITIONS})
@@ -60,8 +66,12 @@ if(DOXYGEN_FOUND)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
 endif(DOXYGEN_FOUND)
 
-# source list
-set(X-IMU-API-SRC
+###################
+# source listings #
+###################
+
+# ximu api
+set(X_IMU_API_SRC
   src/ximuapi/packet/packet_encoding.cpp
   src/ximuapi/utils/fixed_float.cpp
   src/ximuapi/data/register_data.cpp
@@ -77,24 +87,45 @@ set(X-IMU-API-SRC
   src/ximuapi/serialization/writer_base.cpp
 )
 
-# add qt based components to the library
-find_package(Qt5SerialPort)
+# ximu QT-serialport support
 if (Qt5SerialPort_FOUND)
-
+      qt5_wrap_cpp(MOC_SERIAL include/ximuapi/io/serial_port.h)
+    set(X_IMU_API_SERIAL src/ximuapi/io/serial_port.cpp)
 endif (Qt5SerialPort_FOUND)
-if (Qt5Widgets_FOUND)   
-    list(APPEND X-IMU-API-SRC
-        src/ximuapi/io/serial_port.cpp
-        src/ximugui/widgets/simplewindow.cpp
-        src/ximugui/widgets/serialview.cpp
-    )
+
+
+# if widgets add simple window to src
+if (Qt5Widgets_FOUND)
+    set(SIMPLEWINDOW_MOC_HDRS include/ximugui/widgets/simplewindow.h)
+    list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/simplewindow.cpp)
+    list(APPEND X_IMU_GUI_UI src/ximugui/widgets/simplewindow.ui)
+    list(APPEND X_IMU_GUI_H ${SIMPLEWINDOW_MOC_HDRS})
 endif (Qt5Widgets_FOUND)
 
+if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
+    set(SERIALVIEW_MOC_HDRS include/ximugui/widgets/serialview.h)
+    list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/serialview.cpp)
+    list(APPEND X_IMU_GUI_UI src/ximugui/widgets/serialview.ui)
+    list(APPEND X_IMU_GUI_H ${SERIALVIEW_MOC_HDRS})
+endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 
 # add functionality to the library
-add_library(X-IMU-API STATIC ${X-IMU-API-SRC})
+add_library(X-IMU-API STATIC ${X_IMU_API_SRC} ${X_IMU_API_SERIAL} ${MOC_SERIAL})
 
 
+if (Qt5SerialPort_FOUND)
+    qt5_use_modules(X-IMU-API SerialPort)
+endif (Qt5SerialPort_FOUND)
+
+if (Qt5Widgets_FOUND)
+    qt5_wrap_cpp(SIMPLEWINDOW_MOC_SRCS ${SIMPLEWINDOW_MOC_HDRS})
+    qt5_use_modules(X-IMU-API Core)
+endif (Qt5Widgets_FOUND)
+
+if (Qt5SerialPort_FOUND OR Qt5Widgets_FOUND)
+    qt5_wrap_cpp(SERIALVIEW_MOC_SRCS ${SERIALVIEW_MOC_HDRS})
+    qt5_wrap_ui(UI_HEADERS  ${X_IMU_GUI_UI})
+endif (Qt5SerialPort_FOUND OR Qt5Widgets_FOUND)
 
 # setup testing
 
@@ -108,27 +139,16 @@ add_executable (DATA_SERIZ_WRITE tests/data_serial_writer_test.cpp)
 
 # if QT found build the tests/apps
 if (Qt5Widgets_FOUND)
-
-    qt5_use_modules(X-IMU-API SerialPort)
-    qt5_use_modules(X-IMU-API Core)
-
-    qt5_wrap_cpp(MOC_HEADERS
-        include/ximugui/widgets/serialview.h
-        include/ximugui/widgets/simplewindow.h
-        include/ximuapi/io/serial_port.h
-    )
-
-    qt5_wrap_ui(UI_HEADERS
-        src/ximugui/widgets/simplewindow.ui
-        src/ximugui/widgets/serialview.ui
-    )
-
-    qt5_add_resources(RCC_SRCS src/ximugui/rc/serialview.qrc)
-
-    add_executable (QT_WINDOW_TEST tests/qt_window_test.cpp src/ximugui/widgets/simplewindow.cpp ${UI_HEADERS} ${MOC_HEADERS})
-    add_executable (SERIAL_PORT tests/serial_port.cpp src/ximugui/widgets/serialview.cpp ${UI_HEADERS} ${MOC_HEADERS} ${RCC_SRCS})
-    qt5_use_modules(SERIAL_PORT SerialPort)
+    add_executable (QT_WINDOW_TEST tests/qt_window_test.cpp src/ximugui/widgets/simplewindow.cpp ${UI_HEADERS} ${SIMPLEWINDOW_MOC_SRCS})
+    target_link_libraries(QT_WINDOW_TEST X-IMU-API Qt5::Widgets ${CMAKE_THREAD_LIBS_INIT})
 endif (Qt5Widgets_FOUND)
+
+if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
+    qt5_add_resources(SERIALVIEW_RCC_SRCS src/ximugui/rc/serialview.qrc)
+
+    add_executable (SERIAL_PORT tests/serial_port.cpp src/ximugui/widgets/serialview.cpp ${UI_HEADERS} ${SERIALVIEW_MOC_SRCS} ${SERIALVIEW_RCC_SRCS})
+    target_link_libraries(SERIAL_PORT X-IMU-API ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::SerialPort)
+endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 
 
 # link the x-IMU-API with the programs
@@ -138,13 +158,6 @@ target_link_libraries(FXD_FLT_TEST X-IMU-API)
 target_link_libraries(DATA_TYPES_TEST X-IMU-API)
 target_link_libraries(DATA_SERIZ_READ X-IMU-API)
 target_link_libraries(DATA_SERIZ_WRITE X-IMU-API)
-
-# if QT found build the tests
-
-if (Qt5Widgets_FOUND)
-    target_link_libraries(QT_WINDOW_TEST X-IMU-API Qt5::Widgets ${CMAKE_THREAD_LIBS_INIT})
-    target_link_libraries(SERIAL_PORT X-IMU-API ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::SerialPort)
-endif (Qt5Widgets_FOUND)
 
 # add ximu port dump for as test data
 configure_file(data/ximu.dmp ximu.dmp COPYONLY)
