@@ -37,6 +37,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt5SerialPort)
 find_package(Qt5Widgets)
+find_package(Qt5OpenGL)
 
 set(X_IMU_GUI_UI)
 set(X_IMU_GUI_H)
@@ -88,6 +89,10 @@ set(X_IMU_API_SRC
   src/ximuapi/serialization/writer_base.cpp
 )
 
+######
+# Qt #
+######
+
 # ximu QT-serialport support
 if (Qt5SerialPort_FOUND)
       qt5_wrap_cpp(MOC_SERIAL include/ximuapi/io/serial_port.h)
@@ -110,6 +115,14 @@ if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
     list(APPEND X_IMU_GUI_H ${SERIALVIEW_MOC_HDRS})
 endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 
+if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
+    set(ORIENTATIONVIEW_MOC_HDRS include/ximugui/widgets/orientationview.h)
+    list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/orientationview.cpp)
+    list(APPEND X_IMU_GUI_UI src/ximugui/widgets/orientationview.ui)
+    list(APPEND X_IMU_GUI_H ${ORIENTATIONVIEW_MOC_HDRS})
+endif()
+
+
 # add functionality to the library
 add_library(X-IMU-API STATIC ${X_IMU_API_SRC} ${X_IMU_API_SERIAL} ${MOC_SERIAL})
 
@@ -122,6 +135,11 @@ if (Qt5Widgets_FOUND)
     qt5_wrap_cpp(SIMPLEWINDOW_MOC_SRCS ${SIMPLEWINDOW_MOC_HDRS})
     qt5_use_modules(X-IMU-API Core)
 endif (Qt5Widgets_FOUND)
+
+if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
+    qt5_wrap_cpp(ORIENTATIONVIEW_MOC_SRCS ${ORIENTATIONVIEW_MOC_HDRS})
+    qt5_use_modules(X-IMU-API Core OpenGL)
+endif()
 
 if (Qt5SerialPort_FOUND OR Qt5Widgets_FOUND)
     qt5_wrap_cpp(SERIALVIEW_MOC_SRCS ${SERIALVIEW_MOC_HDRS})
@@ -146,10 +164,20 @@ endif (Qt5Widgets_FOUND)
 
 if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
     qt5_add_resources(SERIALVIEW_RCC_SRCS src/ximugui/rc/serialview.qrc)
-
     add_executable (SERIAL_PORT tests/serial_port.cpp src/ximugui/widgets/serialview.cpp ${UI_HEADERS} ${SERIALVIEW_MOC_SRCS} ${SERIALVIEW_RCC_SRCS})
     target_link_libraries(SERIAL_PORT X-IMU-API ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::SerialPort)
 endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
+
+# If both Widget and Opengl add the Opengl (cube)
+# widge. (Simple Quaternions that rotate cube )
+MESSAGE(${ORIENTATIONVIEW_MOC_HDRS})
+if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
+    qt5_add_resources(ORIENTATIONVIEW_RCC_SRCS src/ximugui/rc/orientationview.qrc)
+    MESSAGE(${ORIENTATIONVIEW_RCC_SRCS}$)
+    add_executable (QT_OPENGL_TEST tests/qt_opengl_test.cpp src/ximugui/widgets/orientationview.cpp src/ximugui/widgets/geometryengine.cpp
+${UI_HEADERS} ${ORIENTATIONVIEW_MOC_SRCS} ${ORIENTATIONVIEW_RCC_SRCS})
+    target_link_libraries(QT_OPENGL_TEST X-IMU-API Qt5::Widgets Qt5::OpenGL ${CMAKE_THREAD_LIBS_INIT})
+endif ()
 
 
 # link the x-IMU-API with the programs
@@ -170,6 +198,11 @@ add_test(FIXED_FLOAT FXD_FLT_TEST)
 add_test(DATA_TYPES DATA_TYPES_TEST)
 add_test(DATA_DESERIALIZER_RECIEVER DATA_SERIZ_READ)
 add_test(DATA_DESERIALIZER_SENDER DATA_SERIZ_WRITE)
+
 if (Qt5Widgets_FOUND)
     add_test(QT_WINDOW QT_WINDOW_TEST)
 endif (Qt5Widgets_FOUND)
+
+if (Qt5Widgets_FOUND AND QtOpenGL_FOUND)
+    add_test(QT_OPENGL QT_OPENGL_TEST)
+endif ()
