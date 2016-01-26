@@ -115,9 +115,9 @@ if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 
 
-string(REGEX MATCHALL "([0-9])" QT_OPENGL_VERSION ${Qt5OpenGL_VERSION})
-list (GET QT_OPENGL_VERSION 1 MINOR)
 if (Qt5OpenGL_FOUND)
+    string(REGEX MATCHALL "([0-9])" QT_OPENGL_VERSION ${Qt5OpenGL_VERSION})
+    list (GET QT_OPENGL_VERSION 1 MINOR)
     if (NOT MINOR LESS 4)
          set(Qt5OpenGL_MINOR_5_FOUND "TRUE")
     endif()
