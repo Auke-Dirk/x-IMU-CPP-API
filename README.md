@@ -3,17 +3,35 @@ x-IMU-CPP-API
 
 C++11 port of xioTechnologies API ( c++ ximu ).
 This xioTechnologies project is also hosted on github and can be found [here](https://github.com/xioTechnologies/x-IMU-GUI).
+The latest version of x-IMU-API has build in support for Qt.
+
+**QtSerialPort (>= Qt 5.1.x)**
+
+If the requirements are met, the library is extended --"ximu::SerialPort" with Qt's serialport functionality.
+Next to this a serialport **(Qt)** programm with gui is added for the testing pruposes.
+
+**QOpenGLWidget (>=Qt 5.4.x)**
+
+When then requirements for the QOpenGLWidget are met, a test is added showing a rotating cube.
 
 Code Snippet: *how to use the library*
 ------------------------------------
 ``` cpp
-
+// Whenever the Qt::SerialPort is available
+class MyClass {
+    ximu::SerialPort _sp;
+    void onQuaternionRecieved(const ximu::QuaternionData& q){...}
+};
+...
+// registering for data is based on signals/slots from Qt
+connect(&_sp, &ximu::SerialPort::quaternion, this, &MyClass::onQuaternionRecieved);
+...
 // Create your own Ximu class by extending the two available
 // bases. ReaderBase for reading data from the ximu and WriterBase
 // for writing to the ximu device. 
 class XimuIO : public ximu::ReaderBase, public ximu::WriterBase {
     ..
-    IOPort port; // os specific not included in this library
+    IOPort port; // os specific not included  (Except if Qt5::SerialPort 5.1.x) is found
     
     // often a callback is presented from the IO port
     void IOPortCallback(char* data, int length) {
