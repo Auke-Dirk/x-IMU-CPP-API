@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
   std::vector<unsigned char> bytes;
 
   // read the dump
-  std::ifstream binData(file.c_str(), std::ios_base::in);
+  std::ifstream binData(file.c_str(), std::ios_base::in | std::ios::binary);
   unsigned char chr = binData.get();
 
   while (binData.good()) {
