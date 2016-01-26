@@ -24,8 +24,7 @@ include_directories(
 
 # For arm locate Threads
 string ( TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" CMAKE_SYSTEM_PROCESSOR_LOWERCASE)
-if ("${CMAKE_SYSTEM_PROCESSOR_LOWERCASE}$" MATCHES ".*arm.*")
-  MESSAGE("On a arm machine")
+if ("${CMAKE_SYSTEM_PROCESSOR_LOWERCASE}$" MATCHES ".*arm.*") 
     find_package (Threads)
 endif()
 
@@ -115,7 +114,17 @@ if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
     list(APPEND X_IMU_GUI_H ${SERIALVIEW_MOC_HDRS})
 endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 
-if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
+
+string(REGEX MATCHALL "([0-9])" QT_OPENGL_VERSION ${Qt5OpenGL_VERSION})
+list (GET QT_OPENGL_VERSION 1 MINOR)
+if (Qt5OpenGL_FOUND)
+    if (NOT MINOR LESS 4)
+         set(Qt5OpenGL_MINOR_5_FOUND "TRUE")
+    endif()
+endif()
+
+
+if(Qt5OpenGL_MINOR_5_FOUND AND Qt5Widgets_FOUND)
     set(ORIENTATIONVIEW_MOC_HDRS include/ximugui/widgets/orientationview.h)
     list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/orientationview.cpp)
     list(APPEND X_IMU_GUI_UI src/ximugui/widgets/orientationview.ui)
@@ -170,10 +179,8 @@ endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 
 # If both Widget and Opengl add the Opengl (cube)
 # widge. (Simple Quaternions that rotate cube )
-MESSAGE(${ORIENTATIONVIEW_MOC_HDRS})
-if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
-    qt5_add_resources(ORIENTATIONVIEW_RCC_SRCS src/ximugui/rc/orientationview.qrc)
-    MESSAGE(${ORIENTATIONVIEW_RCC_SRCS}$)
+if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND AND Qt5OpenGL_MINOR_5_FOUND)
+    qt5_add_resources(ORIENTATIONVIEW_RCC_SRCS src/ximugui/rc/orientationview.qrc)    
     add_executable (QT_OPENGL_TEST tests/qt_opengl_test.cpp src/ximugui/widgets/orientationview.cpp src/ximugui/widgets/geometryengine.cpp
 ${UI_HEADERS} ${ORIENTATIONVIEW_MOC_SRCS} ${ORIENTATIONVIEW_RCC_SRCS})
     target_link_libraries(QT_OPENGL_TEST X-IMU-API Qt5::Widgets Qt5::OpenGL ${CMAKE_THREAD_LIBS_INIT})
