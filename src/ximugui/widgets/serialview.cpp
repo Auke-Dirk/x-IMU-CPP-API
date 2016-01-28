@@ -6,10 +6,6 @@
 #include "ximugui/widgets/serialview.h"
 #include "ui_serialview.h"
 
-const QString SerialView::OPEN_LBL = "open";
-const QString SerialView::CLOSE_LBL = "close";
-const QString SerialView::OPEN_FAILED_MSG = "[ERR] Could not open port";
-
 SerialView::SerialView(QWidget *parent) :
     QMainWindow(parent),
     _state(ximu::SerialPort::Message::OKE),
@@ -43,8 +39,6 @@ SerialView::SerialView(QWidget *parent) :
 
     // serialport::messages
     connect(&_sp,&ximu::SerialPort::messages,this,&SerialView::on_message_recieved);
-
-    ui->pushButtonOnOff->setText(OPEN_LBL);
 }
 
 SerialView::~SerialView()
@@ -90,17 +84,17 @@ void SerialView::on_message_recieved(ximu::SerialPort::Message m)
         case ximu::SerialPort::Message::OPEN:
             ui->comboBoxPortNames->setEnabled(false);
             ui->comboBoxBaudRates->setEnabled(false);
-            ui->pushButtonOnOff->setText(CLOSE_LBL);
+            ui->pushButtonOnOff->setText(tr("close"));
         break;
 
         case ximu::SerialPort::Message::CLOSED:
             ui->comboBoxPortNames->setEnabled(true);
             ui->comboBoxBaudRates->setEnabled(true);
-            ui->pushButtonOnOff->setText(OPEN_LBL);
+            ui->pushButtonOnOff->setText(tr("open"));
         break;
 
         case ximu::SerialPort::Message::COULD_NOT_OPEN:
-             this->ui->textArea->appendPlainText(OPEN_FAILED_MSG);
+             this->ui->textArea->appendPlainText(tr("[ERR] Could not open port"));
     }
 }
 
@@ -124,4 +118,11 @@ void SerialView::on_calibrated_inert_mag_recieved(const ximu::CalInertialAndMagn
        << "," << d.magnetometer().z() << ")";
 
     this->ui->textArea->appendPlainText(QString::fromStdString(ss.str()));
+}
+
+void SerialView::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange)
+            ui->retranslateUi(this);
+    QMainWindow::changeEvent(event);
 }

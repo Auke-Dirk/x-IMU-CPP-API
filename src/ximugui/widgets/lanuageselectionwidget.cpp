@@ -14,6 +14,7 @@
     QDir directory("translations");
     QStringList files = directory.entryList(qmFilter);
 
+    _names.insert("en-en.qm", "English");
     _names.insert("nl-nl.qm","Dutch");
     _names.insert("pl-pl.qm","Polish");
 

@@ -34,7 +34,7 @@ endif()
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 if (NOT QTDIR)
-    set(QTDIR " " CACHE PATH "Qt root dir")
+    set(QTDIR "" CACHE PATH "Qt root dir")
 endif()
 
 

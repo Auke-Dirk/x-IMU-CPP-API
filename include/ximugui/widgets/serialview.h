@@ -24,15 +24,13 @@ private slots:
     void on_message_recieved(ximu::SerialPort::Message m);
     void on_text_changed();
 
+protected:
+    void changeEvent(QEvent *event);
 
 private:
     Ui::SerialView *ui;
     ximu::SerialPort _sp;
     ximu::SerialPort::Message _state;
-
-    static const QString OPEN_LBL;
-    static const QString CLOSE_LBL;
-    static const QString OPEN_FAILED_MSG;
 };
 
 #endif // SERIAL_VIEW_H_
