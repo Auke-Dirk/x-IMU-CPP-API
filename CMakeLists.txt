@@ -33,10 +33,15 @@ endif()
 # As moc files are generated in the binary dir, tell CMake
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+if (NOT QTDIR)
+    set(QTDIR " " CACHE PATH "Qt root dir")
+endif()
+
 
 find_package(Qt5SerialPort)
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
+find_package(Qt5LinguistTools)
 
 set(X_IMU_GUI_UI)
 set(X_IMU_GUI_H)
@@ -47,7 +52,6 @@ if (Qt5Widgets_FOUND)
     add_definitions(${Qt5Widgets_DEFINITIONS})
     set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -std=c++11 ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 endif(Qt5Widgets_FOUND)
-
 
 
 # add a target to generate API documentation with Doxygen
@@ -102,9 +106,16 @@ endif (Qt5SerialPort_FOUND)
 # if widgets add simple window to src
 if (Qt5Widgets_FOUND)
     set(SIMPLEWINDOW_MOC_HDRS include/ximugui/widgets/simplewindow.h)
+    set(LANGUAGE_SELECTION_MOC_HDRS include/ximugui/widgets/lanuageselectionwidget.h)
+
     list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/simplewindow.cpp)
+    list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/lanuageselectionwidget.cpp)
+
     list(APPEND X_IMU_GUI_UI src/ximugui/widgets/simplewindow.ui)
+    list(APPEND X_IMU_GUI_UI src/ximugui/widgets/lanuageselectionwidget.ui)
+
     list(APPEND X_IMU_GUI_H ${SIMPLEWINDOW_MOC_HDRS})
+    list(APPEND X_IMU_GUI_H ${LANGUAGE_SELECTION_MOC_HDRS})
 endif (Qt5Widgets_FOUND)
 
 if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
@@ -142,6 +153,7 @@ endif (Qt5SerialPort_FOUND)
 
 if (Qt5Widgets_FOUND)
     qt5_wrap_cpp(SIMPLEWINDOW_MOC_SRCS ${SIMPLEWINDOW_MOC_HDRS})
+    qt5_wrap_cpp(LANGUAGE_SELECTION_MOC_SRCS ${LANGUAGE_SELECTION_MOC_HDRS})
     qt5_use_modules(X-IMU-API Core)
 endif (Qt5Widgets_FOUND)
 
@@ -167,13 +179,22 @@ add_executable (DATA_SERIZ_WRITE tests/data_serial_writer_test.cpp)
 
 # if QT found build the tests/apps
 if (Qt5Widgets_FOUND)
+    # add the simple main window
     add_executable (QT_WINDOW_TEST tests/qt_window_test.cpp src/ximugui/widgets/simplewindow.cpp ${UI_HEADERS} ${SIMPLEWINDOW_MOC_SRCS})
     target_link_libraries(QT_WINDOW_TEST X-IMU-API Qt5::Widgets ${CMAKE_THREAD_LIBS_INIT})
+
+    # add the language selection
+    add_executable (QT_LANAGUAGE_SELECTION apps/language_selection.cpp src/ximugui/widgets/lanuageselectionwidget.cpp ${UI_HEADERS} ${LANGUAGE_SELECTION_MOC_SRCS})
+    target_link_libraries(QT_LANAGUAGE_SELECTION Qt5::Widgets ${CMAKE_THREAD_LIBS_INIT})
+
 endif (Qt5Widgets_FOUND)
 
 if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
     qt5_add_resources(SERIALVIEW_RCC_SRCS src/ximugui/rc/serialview.qrc)
-    add_executable (SERIAL_PORT tests/serial_port.cpp src/ximugui/widgets/serialview.cpp ${UI_HEADERS} ${SERIALVIEW_MOC_SRCS} ${SERIALVIEW_RCC_SRCS})
+    add_executable (SERIAL_PORT tests/serial_port.cpp src/ximugui/widgets/serialview.cpp
+    ${UI_HEADERS} ${SERIALVIEW_MOC_SRCS} ${SERIALVIEW_RCC_SRCS} ${QM} ${LANGUAGE_SELECTION_MOC_SRCS}
+    src/ximugui/widgets/lanuageselectionwidget.cpp
+    )
     target_link_libraries(SERIAL_PORT X-IMU-API ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::SerialPort)
 endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 
@@ -213,3 +234,45 @@ endif (Qt5Widgets_FOUND)
 if (Qt5Widgets_FOUND AND QtOpenGL_FOUND)
     add_test(QT_OPENGL QT_OPENGL_TEST)
 endif ()
+
+################################
+# Qt's lupdate for translation #
+################################
+set(TRANSLATIONS TRUE)
+MACRO(update_translations sources translation_files)
+    if (QTDIR AND TRANSLATIONS)
+        find_program(lupdate lupdate ${QTDIR})
+        if(NOT ${lupdate}-NOTFOUND)
+            execute_process(
+                COMMAND ${lupdate}
+                -silent
+                ${sources}
+                 -ts ${translation_files}
+                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                )
+        endif()
+    endif()
+ENDMACRO(update_translations)
+
+list (APPEND FILES_TO_TRANSLATE ${X_IMU_GUI_SRC} ${X_IMU_GUI_UI} ${X_IMU_GUI_H})
+file (GLOB TRANSLATION_FILES translations/*.ts)
+update_translations("${FILES_TO_TRANSLATE}" "${TRANSLATION_FILES}")
+
+############################################
+# Qt's  lrelease for building the qm files #
+############################################
+if (QTDIR AND TRANSLATIONS)
+    find_program(lrelease lrelease ${QTDIR})
+    if(NOT ${lrelease}-NOTFOUND)
+        add_custom_command(OUTPUT output
+            COMMAND ${lrelease} ${TRANSLATION_FILES}
+            WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR}
+            DEPENDS ${TRANSLATION_FILES}
+            COMMENT "Generating qm files")
+        add_custom_target(build_qm ALL DEPENDS output WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR})
+
+        file (GLOB TRANSLATIONS_QM translations/*.qm)
+        file(COPY ${TRANSLATIONS_QM} DESTINATION "${CMAKE_BINARY_DIR}/translations")
+    endif()
+endif()
+

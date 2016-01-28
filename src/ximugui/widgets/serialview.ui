@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>406</width>
+    <width>567</width>
     <height>559</height>
    </rect>
   </property>
@@ -19,6 +19,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
+    <item row="1" column="0">
+     <widget class="QPlainTextEdit" name="textArea"/>
+    </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBoxBaudrates">
       <property name="title">
@@ -43,6 +46,23 @@
          <property name="buddy">
           <cstring>comboBoxBaudRates</cstring>
          </property>
+        </widget>
+       </item>
+       <item row="0" column="5" rowspan="2">
+        <widget class="LanguageSelectionWidget" name="widget" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>15</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>60</height>
+          </size>
+         </property>
+         <zorder>horizontalSpacer</zorder>
         </widget>
        </item>
        <item row="1" column="0">
@@ -93,9 +113,6 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QPlainTextEdit" name="textArea"/>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -103,13 +120,21 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>406</width>
+     <width>567</width>
      <height>21</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LanguageSelectionWidget</class>
+   <extends>QWidget</extends>
+   <header>include/ximugui/widgets/lanuageselectionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../rc/serialview.qrc"/>
  </resources>
