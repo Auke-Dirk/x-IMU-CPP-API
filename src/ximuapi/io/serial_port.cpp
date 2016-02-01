@@ -5,6 +5,7 @@
 #include "ximuapi/io/serial_port.h"
 
 #include <QtSerialPort/QSerialPort>
+#include <iostream>
 
 namespace ximu{
 
@@ -37,12 +38,17 @@ void SerialPort::run(){
 
     QSerialPort sp;
     sp.setPortName(_port);
+
+    //! NOTICE: if i don't call setBaudrate twice on my ARM
+    //! sometimes the recieved buffer is incorrect.
+    //! (Probably bug on my side, am unable to find it)
+
+    sp.setBaudRate(_baudtrate);
+    _active = sp.open(QIODevice::ReadOnly);
     sp.setBaudRate(_baudtrate);
 
-    _active = sp.open(QIODevice::ReadWrite);
-
     if (!_active){
-        emit this->messages(Message::COULD_NOT_OPEN);                  
+        emit this->messages(Message::COULD_NOT_OPEN);
     }
     else
     {
@@ -50,9 +56,8 @@ void SerialPort::run(){
         while(_active){
             if (sp.waitForReadyRead(_timeout_msec)) {
                 auto recieved = sp.readAll();
-
-                // ximu::BaseReader
-                fill(recieved.begin(), recieved.end());
+                auto ptr = reinterpret_cast<unsigned char*>(recieved.data());
+                fill(ptr, recieved.size());
                 read();
             }
         }
