@@ -22,8 +22,8 @@ SerialView::SerialView(QWidget *parent) :
     ui->comboBoxBaudRates->addItem("57600", QVariant(57600));
     ui->comboBoxBaudRates->addItem("115200", QVariant(115200));
 
-    for (auto& port : QSerialPortInfo::availablePorts())
-        ui->comboBoxPortNames->addItem(port.portName());
+        for (auto& port : QSerialPortInfo::availablePorts())
+            ui->comboBoxPortNames->addItem(port.systemLocation());
 
     // gui::button open/close
     connect(this->ui->pushButtonOnOff, &QPushButton::clicked,this, &SerialView::on_openClose_triggerd);

@@ -52,6 +52,19 @@ class ApplicationXimuReader : public ximu::ReaderBase {
 };
 
 int main(int argc, char* argv[]) {
+
+  /*
+   * Testing one encoded quaternion
+   */
+  ApplicationXimuReader oneQuaternionReader;
+  std::vector<unsigned char> encodedQuaternion = {5, 31, 110, 16, 15, 48, 0, 10, 2, 82, 72, 128 };
+  oneQuaternionReader.fill(encodedQuaternion.begin(),encodedQuaternion.end());
+  oneQuaternionReader.read();
+  if (oneQuaternionReader.QuaternionCount() != 1)
+      return 1;
+
+
+
   ApplicationXimuReader reader;
 
   std::string file("ximu.dmp");

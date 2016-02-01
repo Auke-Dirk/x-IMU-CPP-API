@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "ximuapi/serialization/reader_base.h"
+#include <iostream>
 
 namespace ximu {
 ReaderBase::ReaderBase()
@@ -30,24 +31,38 @@ void ReaderBase::read() {
 
   // todo @aukedirk no-magic numbers
   while (_buffer.size() > 4 && !done) {
-    // locate potential header byte
+
+      // locate potential header byte
     auto frameBuffer = std::find_if(
         _buffer.begin(), _buffer.end(), isFrameBuffer);
 
     // we did not find the framebuffer
     if (frameBuffer == _buffer.end())
-      return;
+    {
+        if (_buffer.size() > 30)
+            _buffer.clear();
+        return;
+    }
 
-    //  todo @auke-dirk investigate enum
-    //  pass to the packetreader
-    switch (PacketReader::read(_buffer.begin(), frameBuffer + 1)) {
-      case PacketReader::INVALID_CHECKSUM:
-      case PacketReader::OKE:
-      case PacketReader::INVALID_PACKET_SIZE:
+    // All messages are between 4 and 30 bytes
+    size_t msgLength = std::distance(_buffer.begin(),frameBuffer);
+    if (msgLength < 4 || msgLength > 30)
+    {
         _buffer.erase(_buffer.begin(), frameBuffer + 1);
-        break;
-      default:
-        _buffer.erase(_buffer.begin(), frameBuffer + 1);
+    }
+    else
+    {
+        //  todo @auke-dirk investigate enum
+        //  pass to the packetreader
+        switch (PacketReader::read(_buffer.begin(), frameBuffer + 1)) {
+          case PacketReader::INVALID_CHECKSUM:
+          case PacketReader::OKE:
+          case PacketReader::INVALID_PACKET_SIZE:
+            _buffer.erase(_buffer.begin(), frameBuffer + 1);
+            break;
+          default:
+            _buffer.erase(_buffer.begin(), frameBuffer + 1);
+        }
     }
   }
 }

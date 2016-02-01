@@ -186,8 +186,13 @@ if (Qt5Widgets_FOUND)
     # add the language selection
     add_executable (QT_LANAGUAGE_SELECTION apps/language_selection.cpp src/ximugui/widgets/lanuageselectionwidget.cpp ${UI_HEADERS} ${LANGUAGE_SELECTION_MOC_SRCS})
     target_link_libraries(QT_LANAGUAGE_SELECTION Qt5::Widgets ${CMAKE_THREAD_LIBS_INIT})
-
 endif (Qt5Widgets_FOUND)
+
+if (Qt5SerialPort_FOUND)
+    #qt5_wrap_cpp(XIMU_MOC_CONSOLE ${CMAKE_SOURCE_DIR}/apps/ximu_console.cpp)
+    add_executable (XIMU_CONSOLE apps/ximu_console.cpp)
+    target_link_libraries(XIMU_CONSOLE X-IMU-API Qt5::Core Qt5::SerialPort) #${CMAKE_THREAD_LIBS_INIT})
+endif()
 
 if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
     qt5_add_resources(SERIALVIEW_RCC_SRCS src/ximugui/rc/serialview.qrc)
