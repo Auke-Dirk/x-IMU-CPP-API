@@ -5,11 +5,18 @@
     <name>LanguageSelectionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Language</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>OrientationView</name>
+    <message>
+        <source>ximu::OrientationView</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -20,7 +27,7 @@
     </message>
     <message>
         <source>Connection</source>
-        <translation></translation>
+        <translation>Connection</translation>
     </message>
     <message>
         <source>&amp;Com:</source>
@@ -32,10 +39,11 @@
     </message>
     <message>
         <source>open</source>
-        <translation></translation>
+        <translation>Open</translation>
     </message>
     <message>
         <source>close</source>
+        <translatorcomment>Close</translatorcomment>
         <translation></translation>
     </message>
     <message>
@@ -48,6 +56,17 @@
     <message>
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ThemeSelectionWidget</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Theme</source>
+        <translation>Theme</translation>
     </message>
 </context>
 </TS>

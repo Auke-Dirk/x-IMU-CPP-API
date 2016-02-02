@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>567</width>
-    <height>559</height>
+    <width>739</width>
+    <height>363</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,9 +19,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="1" column="0">
-     <widget class="QPlainTextEdit" name="textArea"/>
-    </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBoxBaudrates">
       <property name="title">
@@ -49,11 +46,21 @@
         </widget>
        </item>
        <item row="0" column="5" rowspan="2">
+        <widget class="ThemeSelectionWidget" name="widget_2" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="6" rowspan="2">
         <widget class="LanguageSelectionWidget" name="widget" native="true">
          <property name="minimumSize">
           <size>
            <width>200</width>
-           <height>15</height>
+           <height>30</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -62,7 +69,6 @@
            <height>60</height>
           </size>
          </property>
-         <zorder>horizontalSpacer</zorder>
         </widget>
        </item>
        <item row="1" column="0">
@@ -104,7 +110,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>87</width>
+           <width>11</width>
            <height>20</height>
           </size>
          </property>
@@ -113,6 +119,9 @@
       </layout>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QPlainTextEdit" name="textArea"/>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -120,7 +129,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>567</width>
+     <width>739</width>
      <height>21</height>
     </rect>
    </property>
@@ -132,6 +141,12 @@
    <class>LanguageSelectionWidget</class>
    <extends>QWidget</extends>
    <header>include/ximugui/widgets/lanuageselectionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ThemeSelectionWidget</class>
+   <extends>QWidget</extends>
+   <header>include/ximugui/widgets/themeselectionwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -5,7 +5,7 @@
     <name>LanguageSelectionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Language</source>
@@ -39,11 +39,11 @@
     </message>
     <message>
         <source>open</source>
-        <translation></translation>
+        <translation>Open</translation>
     </message>
     <message>
         <source>close</source>
-        <translation>afsluiten</translation>
+        <translation>Afsluiten</translation>
     </message>
     <message>
         <source>[ERR] Could not open port</source>
@@ -55,6 +55,17 @@
     <message>
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ThemeSelectionWidget</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Theme</source>
+        <translation>Thema</translation>
     </message>
 </context>
 </TS>

@@ -107,15 +107,20 @@ endif (Qt5SerialPort_FOUND)
 if (Qt5Widgets_FOUND)
     set(SIMPLEWINDOW_MOC_HDRS include/ximugui/widgets/simplewindow.h)
     set(LANGUAGE_SELECTION_MOC_HDRS include/ximugui/widgets/lanuageselectionwidget.h)
+    set(THEME_SELECTION_MOC_HDRS include/ximugui/widgets/themeselectionwidget.h)
 
     list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/simplewindow.cpp)
     list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/lanuageselectionwidget.cpp)
+    list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/themeselectionwidget.cpp)
 
     list(APPEND X_IMU_GUI_UI src/ximugui/widgets/simplewindow.ui)
     list(APPEND X_IMU_GUI_UI src/ximugui/widgets/lanuageselectionwidget.ui)
+    list(APPEND X_IMU_GUI_UI src/ximugui/widgets/themeselectionwidget.ui)
 
     list(APPEND X_IMU_GUI_H ${SIMPLEWINDOW_MOC_HDRS})
     list(APPEND X_IMU_GUI_H ${LANGUAGE_SELECTION_MOC_HDRS})
+    list(APPEND X_IMU_GUI_H ${THEME_SELECTION_MOC_HDRS})
+
 endif (Qt5Widgets_FOUND)
 
 if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
@@ -154,6 +159,7 @@ endif (Qt5SerialPort_FOUND)
 if (Qt5Widgets_FOUND)
     qt5_wrap_cpp(SIMPLEWINDOW_MOC_SRCS ${SIMPLEWINDOW_MOC_HDRS})
     qt5_wrap_cpp(LANGUAGE_SELECTION_MOC_SRCS ${LANGUAGE_SELECTION_MOC_HDRS})
+    qt5_wrap_cpp(THEME_SELECTION_MOC_SRCS ${THEME_SELECTION_MOC_HDRS})
     qt5_use_modules(X-IMU-API Core)
 endif (Qt5Widgets_FOUND)
 
@@ -196,9 +202,13 @@ endif()
 
 if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
     qt5_add_resources(SERIALVIEW_RCC_SRCS src/ximugui/rc/serialview.qrc)
+    qt5_add_resources(SERIALVIEW_RCC_SRCS src/ximugui/rc/themeselection.qrc)
+
     add_executable (SERIAL_PORT tests/serial_port.cpp src/ximugui/widgets/serialview.cpp
     ${UI_HEADERS} ${SERIALVIEW_MOC_SRCS} ${SERIALVIEW_RCC_SRCS} ${QM} ${LANGUAGE_SELECTION_MOC_SRCS}
+    ${THEME_SELECTION_MOC_SRCS}
     src/ximugui/widgets/lanuageselectionwidget.cpp
+    src/ximugui/widgets/themeselectionwidget.cpp
     )
     target_link_libraries(SERIAL_PORT X-IMU-API ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::SerialPort)
 endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)

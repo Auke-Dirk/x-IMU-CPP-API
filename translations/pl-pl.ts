@@ -5,7 +5,7 @@
     <name>LanguageSelectionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Language</source>
@@ -55,6 +55,17 @@
     <message>
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ThemeSelectionWidget</name>
+    <message>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Theme</source>
+        <translation type="unfinished">Schemat</translation>
     </message>
 </context>
 </TS>
