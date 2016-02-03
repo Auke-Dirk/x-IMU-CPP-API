@@ -76,42 +76,58 @@ void GeometryEngine::initCubeGeometry()
     // For cube we would need only 8 vertices but we have to
     // duplicate vertex for each face because texture coordinate
     // is different.
+
+    float dx = 0.25f;
+    float dy = 0.33f;
     VertexData vertices[] = {
-        // Vertex data for face 0
-        {QVector3D(-1.0f, -1.0f,  1.0f), QVector2D(0.0f, 0.0f)},  // v0
-        {QVector3D( 1.0f, -1.0f,  1.0f), QVector2D(0.33f, 0.0f)}, // v1
-        {QVector3D(-1.0f,  1.0f,  1.0f), QVector2D(0.0f, 0.5f)},  // v2
-        {QVector3D( 1.0f,  1.0f,  1.0f), QVector2D(0.33f, 0.5f)}, // v3
+        // Vertex data for face 0     
+
+        // front
+        {QVector3D(-1.0f, -1.0f,  1.0f), QVector2D(dx, 2 * dy)},  // v0
+        {QVector3D( 1.0f, -1.0f,  1.0f), QVector2D(2 * dx,2 * dy)}, // v1
+        {QVector3D(-1.0f,  1.0f,  1.0f), QVector2D(dx, dy)},  // v2
+        {QVector3D( 1.0f,  1.0f,  1.0f), QVector2D(2 * dx, dy)}, // v3
 
         // Vertex data for face 1
-        {QVector3D( 1.0f, -1.0f,  1.0f), QVector2D( 0.0f, 0.5f)}, // v4
-        {QVector3D( 1.0f, -1.0f, -1.0f), QVector2D(0.33f, 0.5f)}, // v5
-        {QVector3D( 1.0f,  1.0f,  1.0f), QVector2D(0.0f, 1.0f)},  // v6
-        {QVector3D( 1.0f,  1.0f, -1.0f), QVector2D(0.33f, 1.0f)}, // v7
+        {QVector3D( 1.0f, -1.0f,  1.0f), QVector2D(2 * dx,2 * dy)}, // v4
+        {QVector3D( 1.0f, -1.0f, -1.0f), QVector2D(3 * dx,2 * dy)}, // v5
+        {QVector3D( 1.0f,  1.0f,  1.0f), QVector2D(2 * dx, dy)},  // v6
+        {QVector3D( 1.0f,  1.0f, -1.0f), QVector2D(3 * dx,dy)}, // v7
 
+        // mirrord backside
         // Vertex data for face 2
-        {QVector3D( 1.0f, -1.0f, -1.0f), QVector2D(0.66f, 0.5f)}, // v8
-        {QVector3D(-1.0f, -1.0f, -1.0f), QVector2D(1.0f, 0.5f)},  // v9
-        {QVector3D( 1.0f,  1.0f, -1.0f), QVector2D(0.66f, 1.0f)}, // v10
-        {QVector3D(-1.0f,  1.0f, -1.0f), QVector2D(1.0f, 1.0f)},  // v11
+        {QVector3D( 1.0f, -1.0f, -1.0f), QVector2D(3 * dx, 2 *dy)}, // v8
+        {QVector3D(-1.0f, -1.0f, -1.0f), QVector2D(4 * dx, 2 * dy)},  // v9
+        {QVector3D( 1.0f,  1.0f, -1.0f), QVector2D(3 * dx, dy)}, // v10
+        {QVector3D(-1.0f,  1.0f, -1.0f), QVector2D(4 * dx, dy)},  // v11
 
+
+        // mirrored left
         // Vertex data for face 3
-        {QVector3D(-1.0f, -1.0f, -1.0f), QVector2D(0.66f, 0.0f)}, // v12
-        {QVector3D(-1.0f, -1.0f,  1.0f), QVector2D(1.0f, 0.0f)},  // v13
-        {QVector3D(-1.0f,  1.0f, -1.0f), QVector2D(0.66f, 0.5f)}, // v14
-        {QVector3D(-1.0f,  1.0f,  1.0f), QVector2D(1.0f, 0.5f)},  // v15
+        {QVector3D(-1.0f, -1.0f, -1.0f), QVector2D(0.0f, 2 * dy)}, // v12
+        {QVector3D(-1.0f, -1.0f,  1.0f), QVector2D(dx, 2 * dy)},  // v13
+        {QVector3D(-1.0f,  1.0f, -1.0f), QVector2D(0.0f, dy)}, // v14
+        {QVector3D(-1.0f,  1.0f,  1.0f), QVector2D(dx, dy)},  // v15
 
         // Vertex data for face 4
-        {QVector3D(-1.0f, -1.0f, -1.0f), QVector2D(0.33f, 0.0f)}, // v16
-        {QVector3D( 1.0f, -1.0f, -1.0f), QVector2D(0.66f, 0.0f)}, // v17
-        {QVector3D(-1.0f, -1.0f,  1.0f), QVector2D(0.33f, 0.5f)}, // v18
-        {QVector3D( 1.0f, -1.0f,  1.0f), QVector2D(0.66f, 0.5f)}, // v19
+        // top
+        {QVector3D(-1.0f, 1.0f, 1.0f), QVector2D(dx, dy)}, // v16
+        {QVector3D( 1.0f, 1.0f, 1.0f), QVector2D(2 * dx, dy)}, // v17
+        {QVector3D(-1.0f, 1.0f, -1.0f), QVector2D(dx, 0)}, // v18
+        {QVector3D( 1.0f, 1.0f, -1.0f), QVector2D(2 * dx, 0)}, // v19
 
         // Vertex data for face 5
-        {QVector3D(-1.0f,  1.0f,  1.0f), QVector2D(0.33f, 0.5f)}, // v20
-        {QVector3D( 1.0f,  1.0f,  1.0f), QVector2D(0.66f, 0.5f)}, // v21
-        {QVector3D(-1.0f,  1.0f, -1.0f), QVector2D(0.33f, 1.0f)}, // v22
-        {QVector3D( 1.0f,  1.0f, -1.0f), QVector2D(0.66f, 1.0f)}  // v23
+        // bott
+        {QVector3D(-1.0f,  -1.0f, -1.0f), QVector2D(dx, 3 * dy)}, // v20
+        {QVector3D( 1.0f,  -1.0f, -1.0f), QVector2D(2  * dx, 3 *dy)}, // v21
+        {QVector3D(-1.0f,  -1.0f, 1.0f), QVector2D(dx, 2 * dy)}, // v22
+        {QVector3D( 1.0f,  -1.0f, 1.0f), QVector2D(2 * dx, 2 * dy)}  // v23
+
+
+
+
+
+
     };
 
     // Indices for drawing cube faces using triangle strips.

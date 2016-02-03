@@ -90,7 +90,7 @@ void OrientationView::initShaders(){
 }
 
 void OrientationView::initTextures(){
-    _texture = new QOpenGLTexture(QImage(":/images/cube_faces.png").mirrored());
+    _texture = new QOpenGLTexture(QImage(":/images/cube_faces.png"));
     _texture->setMinificationFilter(QOpenGLTexture::Nearest);
     _texture->setMagnificationFilter(QOpenGLTexture::Linear);
     _texture->setWrapMode(QOpenGLTexture::Repeat);
