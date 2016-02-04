@@ -1,10 +1,16 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
+#include <QPluginLoader>
 #include <QPlainTextEdit>
 #include <QTextStream>
+#include <QDir>
 #include <sstream>
 #include "ximugui/widgets/serialview.h"
+#include "ximugui/widgets/ximuwidget_iplugin_factory.h"
 #include "ui_serialview.h"
+
+
+#include <iostream>
 
 SerialView::SerialView(QWidget *parent) :
     QMainWindow(parent),
@@ -39,6 +45,30 @@ SerialView::SerialView(QWidget *parent) :
 
     // serialport::messages
     connect(&_sp,&ximu::SerialPort::messages,this,&SerialView::on_message_recieved);
+
+
+    QStringList qmFilter{"*.dll","*.so"};
+    QDir plugins("plugins");
+    if (plugins.exists())
+    {
+        for(auto& item : plugins.entryList(qmFilter))
+        {
+            auto path = QDir::cleanPath(plugins.absolutePath() + QDir::separator() + item);
+            QPluginLoader loader(path);
+            QObject* instance = loader.instance();
+
+            if( instance ){
+                XimuWidgetIPluginFactory *plugin = qobject_cast< XimuWidgetIPluginFactory* >( instance );
+                if(plugin){
+                }
+            }else
+            {
+                std::cout << loader.errorString().toStdString() << std::endl;
+            }
+        }
+    }
+
+
 }
 
 SerialView::~SerialView()

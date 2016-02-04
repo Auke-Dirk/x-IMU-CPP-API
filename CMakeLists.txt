@@ -42,6 +42,10 @@ find_package(Qt5SerialPort)
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
 find_package(Qt5LinguistTools)
+find_package(Qt5Gui)
+find_package(Qt5Designer)
+
+add_definitions(-DQT_PLUGIN)
 
 set(X_IMU_GUI_UI)
 set(X_IMU_GUI_H)
@@ -53,6 +57,9 @@ if (Qt5Widgets_FOUND)
     set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -std=c++11 ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 endif(Qt5Widgets_FOUND)
 
+if (Qt5Gui_FOUND AND Qt5Designer_FOUND)
+    set(USE_PLUGINS TRUE)
+endif()
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
@@ -95,6 +102,21 @@ set(X_IMU_API_SRC
 ######
 # Qt #
 ######
+
+# Qt plugin support
+if (USE_PLUGINS)
+
+    set(ORIENTATION_VIEW_PLUGIN_MOC_HDRS include/ximugui/widgets/orientationview_plugin.h)
+    list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/orientationview_plugin.cpp)
+    list(APPEND X_IMU_GUI_H ${ORIENTATION_VIEW_PLUGIN_MOC_HDRS})
+    add_library(orientation SHARED src/ximugui/widgets/orientationview_plugin.cpp )
+    #set_target_properties(orientation PROPERTIES LIBRARY_OUTPUT_DIRECTORY   ${PROJECT_BINARY_DIR}/plugins)
+    message(STATUS "${PROJECT_BINARY_DIR}/plugins")
+    set_property(TARGET orientation PROPERTY RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/plugins")
+   qt5_use_modules( orientation  Core Widgets Designer )
+
+endif()
+
 
 # ximu QT-serialport support
 if (Qt5SerialPort_FOUND)
