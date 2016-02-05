@@ -28,12 +28,6 @@ public:
     ~OrientationView();
 
     void rotation(QQuaternion& quaternion);
-
-public slots:
-    void onNewRotation(const ximu::QuaternionData& quaternion);
-    void run(const QString& name);
-    void registerThread(QThread* thread);
-
 private:
 
     Ui::OrientationView *ui;
