@@ -6,8 +6,8 @@
 #include <QDir>
 #include <sstream>
 #include "ximugui/widgets/serialview.h"
-#include "ximugui/widgets/ximuwidget_iplugin_factory.h"
 #include "ui_serialview.h"
+#include <QDialog>
 
 
 #include <iostream>
@@ -46,29 +46,8 @@ SerialView::SerialView(QWidget *parent) :
     // serialport::messages
     connect(&_sp,&ximu::SerialPort::messages,this,&SerialView::on_message_recieved);
 
-
-    QStringList qmFilter{"*.dll","*.so"};
-    QDir plugins("plugins");
-    if (plugins.exists())
-    {
-        for(auto& item : plugins.entryList(qmFilter))
-        {
-            auto path = QDir::cleanPath(plugins.absolutePath() + QDir::separator() + item);
-            QPluginLoader loader(path);
-            QObject* instance = loader.instance();
-
-            if( instance ){
-                XimuWidgetIPluginFactory *plugin = qobject_cast< XimuWidgetIPluginFactory* >( instance );
-                if(plugin){
-                }
-            }else
-            {
-                std::cout << loader.errorString().toStdString() << std::endl;
-            }
-        }
-    }
-
-
+    // load all the plugins
+    loadPlugins();
 }
 
 SerialView::~SerialView()
@@ -98,6 +77,7 @@ void SerialView::on_openClose_triggerd()
                 ui->comboBoxPortNames->currentText().toStdString(),
                 ui->comboBoxBaudRates->currentData().toInt()
             );
+            break;
         }
         case ximu::SerialPort::OPEN:
         {
@@ -155,4 +135,32 @@ void SerialView::changeEvent(QEvent *event)
     if (event->type() == QEvent::LanguageChange)
             ui->retranslateUi(this);
     QMainWindow::changeEvent(event);
+}
+
+void SerialView::loadPlugins()
+{
+    QStringList qmFilter{"*.dll","*.so", "*.dylib"};
+    QDir plugins("plugins");
+    if (plugins.exists())
+    {
+        for(auto& item : plugins.entryList(qmFilter))
+        {
+            auto path = QDir::cleanPath(plugins.absolutePath() + QDir::separator() + item);
+            QPluginLoader loader(path);
+            QObject* instance = loader.instance();
+
+            if( instance ){
+                XimuWidgetIPluginFactory *plugin = qobject_cast< XimuWidgetIPluginFactory* >( instance );
+                if(plugin)
+                {
+                    std::unique_ptr<XimuWidgetIPluginFactory> uniquePlugin(plugin);
+                    _plugins.push_back(std::move(uniquePlugin));
+                }
+            }else
+            {
+                QString err = loader.errorString();
+                std::cout << loader.errorString().toStdString() << std::endl;
+            }
+        }
+    }
 }

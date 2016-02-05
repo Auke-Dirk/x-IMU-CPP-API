@@ -12,6 +12,7 @@
 #include <QOpenGLShaderProgram>
 
 #include "ximugui/widgets/geometryengine.h"
+#include "ximuapi/data/quaternion_data.h"
 
 
 namespace Ui {
@@ -28,6 +29,11 @@ public:
 
     void rotation(QQuaternion& quaternion);
 
+public slots:
+    void onNewRotation(const ximu::QuaternionData& quaternion);
+    void run(const QString& name);
+    void registerThread(QThread* thread);
+
 private:
 
     Ui::OrientationView *ui;
@@ -41,6 +47,7 @@ private:
     GeometryEngine* _geometryEngine;
     QOpenGLTexture *_texture;
     QQuaternion _rotation;
+    QThread* _thread;
 
 protected:
     void timerEvent(QTimerEvent *e) Q_DECL_OVERRIDE;

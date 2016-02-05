@@ -7,10 +7,9 @@
 
 
 #include "ximuapi/serialization/reader_base.h"
-
+#include <QObject>
 #include <QMutex>
-#include <QThread>
-#include <QWaitCondition>
+#include <QSerialPort>
 
 namespace ximu{
 
@@ -21,11 +20,12 @@ namespace ximu{
  *  in API. The SerialPort implementation is nothing more than a thin wrapper
  *  around the QSerialPort
  */
-class SerialPort : public QThread, public ReaderBase{
-    Q_OBJECT
+class SerialPort : public QObject, public ReaderBase
+{
+    Q_OBJECT    
 public:
     enum Message {OKE, COULD_NOT_OPEN, CLOSED, OPEN };
-    SerialPort(QObject* parent = 0 );
+    SerialPort(QObject* parent = 0 );    
     void open(const std::string& port, size_t baudrate);
     void close();
 
@@ -37,9 +37,13 @@ signals:
 protected:
     void run();
 
-private:
+private slots:
+void onReadyRead();
+
+private:    
+    QString _port;    
+    QSerialPort _sp;
     QMutex _mutex;
-    QString _port;
 
     bool _active;
     size_t _baudtrate;

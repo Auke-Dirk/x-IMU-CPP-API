@@ -3,18 +3,26 @@
 */
 
 #include "ximuapi/io/serial_port.h"
-
 #include <QtSerialPort/QSerialPort>
 #include <iostream>
 
 namespace ximu{
 
-SerialPort::SerialPort(QObject* parent)
-    : QThread(parent),_active(false)
+SerialPort::SerialPort(QObject* parent):
+    _active(false)
 {
     qRegisterMetaType<ximu::QuaternionData>();
     qRegisterMetaType<ximu::CalInertialAndMagneticData>();
-    qRegisterMetaType<ximu::SerialPort::Message>("Message");
+    qRegisterMetaType<ximu::SerialPort::Message>("Message");    
+    connect(&_sp,&QSerialPort::readyRead,this,&SerialPort::onReadyRead);
+}
+
+void SerialPort::onReadyRead()
+{
+    auto recieved = _sp.readAll();
+    auto ptr = reinterpret_cast<unsigned char*>(recieved.data());
+    fill(ptr, recieved.size());
+    read();
 }
 
 void SerialPort::open(const std::string& port, size_t baudrate){
@@ -24,46 +32,18 @@ void SerialPort::open(const std::string& port, size_t baudrate){
     _baudtrate = baudrate;
     _timeout_msec = 50;
 
-    if (!isRunning())
-        start();
+    _sp.setPortName(_port);
+    _sp.setBaudRate(_baudtrate);
+    _active = _sp.open(QIODevice::ReadWrite);
+    _sp.setBaudRate(_baudtrate);
+    _sp.setFlowControl(QSerialPort::HardwareControl);
+
+    emit this->messages(_active ? Message::OPEN : Message::COULD_NOT_OPEN);
 }
 
-void SerialPort::close(){
-    _active = false;
-}
-
-
-void SerialPort::run(){
-    _mutex.lock();
-
-    QSerialPort sp;
-    sp.setPortName(_port);
-
-    //! NOTICE: if i don't call setBaudrate twice on my ARM
-    //! sometimes the recieved buffer is incorrect.
-    //! (Probably bug on my side, am unable to find it)
-
-    sp.setBaudRate(_baudtrate);
-    _active = sp.open(QIODevice::ReadOnly);
-    sp.setBaudRate(_baudtrate);
-
-    if (!_active){
-        emit this->messages(Message::COULD_NOT_OPEN);
-    }
-    else
-    {
-        emit this->messages(Message::OPEN);
-        while(_active){
-            if (sp.waitForReadyRead(_timeout_msec)) {
-                auto recieved = sp.readAll();
-                auto ptr = reinterpret_cast<unsigned char*>(recieved.data());
-                fill(ptr, recieved.size());
-                read();
-            }
-        }
-        emit this->messages(Message::CLOSED);
-    }
-    _mutex.unlock();
+void SerialPort::close(){    
+    _sp.close();
+    emit this->messages(Message::CLOSED);
 }
 
 void SerialPort::recievedQuaternionData(ximu::QuaternionData& q)

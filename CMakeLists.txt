@@ -44,6 +44,7 @@ find_package(Qt5OpenGL)
 find_package(Qt5LinguistTools)
 find_package(Qt5Gui)
 find_package(Qt5Designer)
+find_package(Qt5Core)
 
 add_definitions(-DQT_PLUGIN)
 
@@ -102,21 +103,6 @@ set(X_IMU_API_SRC
 ######
 # Qt #
 ######
-
-# Qt plugin support
-if (USE_PLUGINS)
-
-    set(ORIENTATION_VIEW_PLUGIN_MOC_HDRS include/ximugui/widgets/orientationview_plugin.h)
-    list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/orientationview_plugin.cpp)
-    list(APPEND X_IMU_GUI_H ${ORIENTATION_VIEW_PLUGIN_MOC_HDRS})
-    add_library(orientation SHARED src/ximugui/widgets/orientationview_plugin.cpp )
-    #set_target_properties(orientation PROPERTIES LIBRARY_OUTPUT_DIRECTORY   ${PROJECT_BINARY_DIR}/plugins)
-    message(STATUS "${PROJECT_BINARY_DIR}/plugins")
-    set_property(TARGET orientation PROPERTY RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/plugins")
-   qt5_use_modules( orientation  Core Widgets Designer )
-
-endif()
-
 
 # ximu QT-serialport support
 if (Qt5SerialPort_FOUND)
@@ -311,5 +297,35 @@ if (QTDIR AND TRANSLATIONS)
         file (GLOB TRANSLATIONS_QM translations/*.qm)
         file(COPY ${TRANSLATIONS_QM} DESTINATION "${CMAKE_BINARY_DIR}/translations")
     endif()
+endif()
+
+
+
+# Qt plugin support
+if (USE_PLUGINS)
+
+    set(ORIENTATION_VIEW_PLUGIN_MOC_HDRS
+            include/ximugui/widgets/orientationview_plugin.h
+            include/ximugui/widgets/orientationview.h
+            )
+
+    list(APPEND X_IMU_GUI_SRC src/ximugui/widgets/orientationview_plugin.cpp)
+    list(APPEND X_IMU_GUI_H ${ORIENTATION_VIEW_PLUGIN_MOC_HDRS})
+
+    qt5_wrap_cpp(ORIEN_PLUGIN
+        include/ximugui/widgets/orientationview_plugin.h
+        include/ximugui/widgets/orientationview.h
+        )
+    qt5_wrap_ui(ORIEN_UI  src/ximugui/widgets/orientationview.ui)
+
+    add_library(orientation SHARED src/ximugui/widgets/orientationview_plugin.cpp  ${ORIEN_PLUGIN}
+                                   src/ximugui/widgets/geometryengine.cpp
+                                   src/ximugui/widgets/orientationview.cpp ${ORIENTATIONVIEW_RCC_SRCS}
+            )
+    #set_target_properties(orientation PROPERTIES LIBRARY_OUTPUT_DIRECTORY   ${PROJECT_BINARY_DIR}/plugins)
+
+    set_property(TARGET orientation PROPERTY RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/plugins")
+    qt5_use_modules(orientation  Core Widgets OpenGL)
+    target_link_libraries(orientation Qt5::Widgets Qt5::OpenGL ${CMAKE_THREAD_LIBS_INIT} X-IMU-API)
 endif()
 
