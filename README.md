@@ -8,7 +8,7 @@ The latest version of x-IMU-API has build in support for Qt.
 
 Mac OS X             |  ARM Chrubuntu | Windows 7
 :-------------------------:|:-------------------------:|:-------------------------:|
-![Mac](images/screenshots/mac.png)  |  ![ARM Chrubuntu](images/screenshots/arm.png)  |![Windows](images/screenshots/windows.png)
+[![Mac](images/screenshots/mac.png)](https://raw.githubusercontent.com/Auke-Dirk/x-IMU-CPP-API/master/images/screenshots/mac.png)|  ![ARM Chrubuntu](images/screenshots/arm.png)  |![Windows](images/screenshots/windows.png)
 
 
 **QtSerialPort (>= Qt 5.1.x)**
