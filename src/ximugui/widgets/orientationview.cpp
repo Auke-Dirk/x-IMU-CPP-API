@@ -2,15 +2,18 @@
 #include "ui_orientationview.h"
 #include <QFile>
 #include <iostream>
+#include <QThread>
 
 OrientationView::OrientationView(QWidget *parent) :
     QOpenGLWidget(parent),
     ui(new Ui::OrientationView),
     _texture(0),
     _geometryEngine(0),
-    _rotation(1.0,0,0,0)
+    _rotation(1.0,0,0,0),
+    _axis(AxisSystem::XIMU)
 {
     ui->setupUi(this);
+    connect(ui->radioButton_opengl,&QRadioButton::toggled,this,&OrientationView::onAxisSystemChanged);
 }
 
 OrientationView::~OrientationView()
@@ -18,6 +21,14 @@ OrientationView::~OrientationView()
     delete ui;
 }
 
+void OrientationView::onAxisSystemChanged()
+{
+    bool opengl = ui->radioButton_opengl->isChecked();
+    bool ximu = ui->radioButton_ximu->isChecked();
+
+    _axis = opengl ? AxisSystem::OPEGNL : AxisSystem::XIMU;
+    _changeTextures = true;
+}
 
 /*
  * OpenGL overload section
@@ -31,8 +42,10 @@ void OrientationView::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
+
+
      _geometryEngine = new GeometryEngine;
-    _timer.start(12, this);
+     _timer.start(12, this);
 }
 
 void OrientationView::timerEvent(QTimerEvent *)
@@ -40,7 +53,29 @@ void OrientationView::timerEvent(QTimerEvent *)
     update();
 }
 
+void OrientationView::registerThread(QThread* thread)
+{
+   _thread = thread;
+   connect(thread,&QThread::objectNameChanged,this,&OrientationView::run);
+}
+
+void OrientationView::run(const QString &name)
+{
+    while(_thread)
+    {        
+        paintGL();
+        _thread->msleep(1000);
+    }
+}
+
 void OrientationView::paintGL(){
+
+    if (_changeTextures)
+    {
+        initTextures();
+        _changeTextures = false;
+    }
+
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -90,7 +125,15 @@ void OrientationView::initShaders(){
 }
 
 void OrientationView::initTextures(){
-    _texture = new QOpenGLTexture(QImage(":/images/cube_faces.png"));
+
+    //:/images/cube_faces_ximu.png
+
+    if (_axis == AxisSystem::OPEGNL)
+        _texture = new QOpenGLTexture(QImage(":/images/cube_faces.png"));
+    else
+        _texture = new QOpenGLTexture(QImage(":/images/cube_faces_ximu.png"));
+
+
     _texture->setMinificationFilter(QOpenGLTexture::Nearest);
     _texture->setMagnificationFilter(QOpenGLTexture::Linear);
     _texture->setWrapMode(QOpenGLTexture::Repeat);
@@ -99,5 +142,10 @@ void OrientationView::rotation(QQuaternion& quaternion)
 {
     _rotation = quaternion;
 }
+
+ void OrientationView::onNewRotation(const ximu::QuaternionData& q)
+ {
+    _rotation = QQuaternion(q.w(),-q.x(), -q.z(),q.y());
+ }
 
 

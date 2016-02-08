@@ -16,6 +16,8 @@ class OrientationViewPlugin :
 
 public:
     virtual std::string pluginName();
+    virtual std::string displayName();
+    QWidget* create();
     OrientationViewPlugin();
 };
 

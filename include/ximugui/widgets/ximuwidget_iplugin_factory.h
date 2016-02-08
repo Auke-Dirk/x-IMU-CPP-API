@@ -9,6 +9,8 @@ class XimuWidgetIPluginFactory
 {
 public:
     virtual std::string pluginName() = 0;
+    virtual std::string displayName() = 0;
+    virtual QWidget* create() = 0;
     virtual ~XimuWidgetIPluginFactory(){}
 };
 

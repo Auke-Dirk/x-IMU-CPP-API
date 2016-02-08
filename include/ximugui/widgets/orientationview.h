@@ -33,6 +33,7 @@ public slots:
     void onNewRotation(const ximu::QuaternionData& quaternion);
     void run(const QString& name);
     void registerThread(QThread* thread);
+    void onAxisSystemChanged();
 
 private:
 
@@ -48,6 +49,10 @@ private:
     QOpenGLTexture *_texture;
     QQuaternion _rotation;
     QThread* _thread;
+
+    enum AxisSystem {OPEGNL, XIMU};
+    AxisSystem _axis;
+    bool _changeTextures;
 
 protected:
     void timerEvent(QTimerEvent *e) Q_DECL_OVERRIDE;

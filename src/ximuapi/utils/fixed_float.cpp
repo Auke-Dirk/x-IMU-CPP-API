@@ -4,6 +4,7 @@
 
 
 #include "ximuapi/utils/fixed_float.h"
+#include <stdint.h>
 
 namespace ximu {
 
@@ -13,7 +14,11 @@ float FixedFloat::toFloat(short fixedValue, Qvals q) {
 }
 
 short FixedFloat::toFixed(char msb, char lsb) {
-  return (static_cast<short>(msb) << 8) | static_cast<short>(lsb);
+
+  int16_t v = static_cast<int16_t>(static_cast<int16_t >(msb) << 8);
+  int16_t w = static_cast<int16_t>(static_cast<unsigned char>(lsb));
+  short s = v | w;
+  return s;
 }
 
 float FixedFloat::toFloat(char msb, char lsb, Qvals q) {

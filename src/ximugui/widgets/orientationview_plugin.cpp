@@ -10,3 +10,13 @@ std::string OrientationViewPlugin::pluginName()
 {
     return "OrientationViewFactory";
 }
+
+std::string OrientationViewPlugin::displayName()
+{
+    return "3D Cube";
+}
+
+QWidget* OrientationViewPlugin::create()
+{
+    return new OrientationView();
+}

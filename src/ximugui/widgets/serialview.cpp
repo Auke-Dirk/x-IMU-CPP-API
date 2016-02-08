@@ -4,6 +4,7 @@
 #include <QPlainTextEdit>
 #include <QTextStream>
 #include <QDir>
+#include <QPushButton>
 #include <sstream>
 #include "ximugui/widgets/serialview.h"
 #include "ui_serialview.h"
@@ -39,7 +40,7 @@ SerialView::SerialView(QWidget *parent) :
 
     connect(this->ui->textArea,&QPlainTextEdit::textChanged,this,&SerialView::on_text_changed);
 
-    //serialport::interial magnetic
+    // serialport::interial magnetic
     connect(&_sp,&ximu::SerialPort::calibratedInertialAndMagneticData,
             this,&SerialView::on_calibrated_inert_mag_recieved);
 
@@ -48,6 +49,7 @@ SerialView::SerialView(QWidget *parent) :
 
     // load all the plugins
     loadPlugins();
+    displayPlugins();
 }
 
 SerialView::~SerialView()
@@ -164,3 +166,34 @@ void SerialView::loadPlugins()
         }
     }
 }
+
+void SerialView::displayPlugins()
+{
+    for(auto& item : _plugins)
+    {
+        QPushButton* button = new QPushButton(this);
+        button->setText(QString::fromStdString(item->displayName()));
+        ui->pluginLayout->addWidget(button,0);
+        ui->pluginLayout->setAlignment(Qt::AlignTop);
+        connect(button,&QPushButton::pressed,this,&SerialView::onPluginPressed);
+    }
+}
+
+void SerialView::onPluginPressed()
+{
+    QPushButton* button = static_cast<QPushButton*>(sender());
+    std::string name = button->text().toStdString();
+
+    PLUGIN_ITERATOR it = std::find_if(std::begin(_plugins),std::end(_plugins),
+                 [&](PLUGIN_TYPE& ptr){ return ptr->displayName() == name;}
+              );
+    if (it != std::end(_plugins))
+    {
+        QWidget* w = (*it)->create();
+        w->show();
+       _sp.connect(&_sp,SIGNAL(quaternion(const ximu::QuaternionData&)),
+                   w,SLOT(onNewRotation(const ximu::QuaternionData&))
+                   );
+    }
+}
+
