@@ -143,7 +143,7 @@ if (Qt5OpenGL_FOUND)
     string(REGEX MATCHALL "([0-9])" QT_OPENGL_VERSION ${Qt5OpenGL_VERSION})
     list (GET QT_OPENGL_VERSION 1 MINOR)
     if (NOT MINOR LESS 4)
-         set(Qt5OpenGL_MINOR_5_FOUND "TRUE")
+         set(    "TRUE")
     endif()
 endif()
 
@@ -302,7 +302,7 @@ endif()
 
 
 # Qt plugin support
-if (USE_PLUGINS)
+if (USE_PLUGINS AND Qt5OpenGL_MINOR_5_FOUND)
 
     set(ORIENTATION_VIEW_PLUGIN_MOC_HDRS
             include/ximugui/widgets/orientationview_plugin.h
