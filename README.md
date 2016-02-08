@@ -5,6 +5,12 @@ C++11 port of xioTechnologies API ( c++ ximu ).
 This xioTechnologies project is also hosted on github and can be found [here](https://github.com/xioTechnologies/x-IMU-GUI).
 The latest version of x-IMU-API has build in support for Qt.
 
+
+Mac OS X             |  ARM Chrubuntu | Windows 7
+:-------------------------:|:-------------------------:|:-------------------------:|
+![Mac](images/screenshots/mac.png)  |  ![ARM Chrubuntu](images/screenshots/arm.png)  |![Windows](images/screenshots/windows.png)
+
+
 **QtSerialPort (>= Qt 5.1.x)**
 
 If the requirements are met, the library is extended --"ximu::SerialPort" with Qt's serialport functionality.
