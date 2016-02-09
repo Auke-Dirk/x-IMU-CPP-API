@@ -14,11 +14,11 @@ Mac OS X             |  ARM Chrubuntu | Windows 7
 **QtSerialPort (>= Qt 5.1.x)**
 
 If the requirements are met, the library is extended --"ximu::SerialPort" with Qt's serialport functionality.
-Next to this a serialport **(Qt)** programm with gui is added for the testing pruposes.
+Next to this a serialport **(Qt)** gui and console program.
 
 **QOpenGLWidget (>=Qt 5.4.x)**
 
-When then requirements for the QOpenGLWidget are met, a test is added showing a rotating cube.
+When then requirements for the QOpenGLWidget are met, a test is added showing a rotating cube. And a plugin '3D Cube' becomes available.
 
 Code Snippet: *how to use the library*
 ------------------------------------
