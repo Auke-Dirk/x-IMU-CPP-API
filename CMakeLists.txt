@@ -37,7 +37,7 @@ if (NOT QTDIR)
     set(QTDIR "" CACHE PATH "Qt root dir")
 endif()
 
-
+# Finding QT PACKES AND GIVE OUTPUT
 find_package(Qt5SerialPort)
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
@@ -45,6 +45,41 @@ find_package(Qt5LinguistTools)
 find_package(Qt5Gui)
 find_package(Qt5Designer)
 find_package(Qt5Core)
+
+if (Qt5OpenGL_FOUND)
+    string(REGEX MATCHALL "([0-9])" QT_OPENGL_VERSION ${Qt5OpenGL_VERSION})
+    list (GET QT_OPENGL_VERSION 1 MINOR)
+    if (NOT MINOR LESS 4)
+         set(Qt5OpenGL_MINOR_5_FOUND "TRUE")
+    endif()
+endif()
+
+MESSAGE(STATUS "-MODULES-")
+if (Qt5Widgets_FOUND)
+    MESSAGE( STATUS "Qt5Widgets                 : [SUCCES]")
+else()
+    MESSAGE( STATUS "Qt5Widgets                 : [FAILED]")
+endif()
+
+if (Qt5SerialPort_FOUND)
+    MESSAGE( STATUS "Qt5SerialPort              : [SUCCES]")
+else()
+    MESSAGE( STATUS "Qt5SerialPort              : [FAILED]")
+endif()
+
+if (Qt5OpenGL_FOUND)
+    MESSAGE( STATUS "Qt5OpenGL                  : [SUCCES]")
+else()
+    MESSAGE( STATUS "Qt5OpenGL                  : [FAILED]")
+endif()
+
+if(Qt5OpenGL_MINOR_5_FOUND)
+    MESSAGE(STATUS "Opengl Widget minor version: [SUCCES]")
+else()
+    MESSAGE(STATUS "Opengl Widget minor version: [FAILED]")
+endif()
+MESSAGE(STATUS "-MODULES-")
+
 
 add_definitions(-DQT_PLUGIN)
 
@@ -138,14 +173,6 @@ if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
     list(APPEND X_IMU_GUI_H ${SERIALVIEW_MOC_HDRS})
 endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 
-
-if (Qt5OpenGL_FOUND)
-    string(REGEX MATCHALL "([0-9])" QT_OPENGL_VERSION ${Qt5OpenGL_VERSION})
-    list (GET QT_OPENGL_VERSION 1 MINOR)
-    if (NOT MINOR LESS 4)
-         set(    "TRUE")
-    endif()
-endif()
 
 
 if(Qt5OpenGL_MINOR_5_FOUND AND Qt5Widgets_FOUND)
