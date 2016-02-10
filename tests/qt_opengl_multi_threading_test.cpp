@@ -1,42 +1,34 @@
 /*
   Copyright 2015 Auke-Dirk Pietersma
 */
-
-#include <fstream>
+#include <tuple>
 #include <vector>
-#include <algorithm>
-#include <random>
-#include <string>
 #include <thread>
-#include <iostream>
+#include <memory>
+#include <QDebug>
+#include <QScreen>
 #include <QWindow>
 #include <QApplication>
 #include <QOpenGLFunctions>
-#include <memory>
-#include <QDebug>
-#include <QGLFormat>
-#include <QDialog>
-#include "ximuapi/gl/gl_context.h"
-#include <QScreen>
 #include <QOpenGLFunctions_4_0_Core>
-#include <tuple>
 
+#include "ximuapi/gl/gl_context.h"
+
+
+/* Simple Renderer */
 class SmoothRenderer : public ximu::IGlRenderer
 {
 private:
     QOpenGLFunctions_4_0_Core* GL;
     bool _isInitalized = false;
-    GLfloat value = 0;
-    GLfloat max = 1.0;
-
+    GLfloat value = 0;    
 public:
     virtual void initializeGL(std::unique_ptr<QOpenGLContext>& ctx)
     {
         GL = ctx->versionFunctions<QOpenGLFunctions_4_0_Core>();
-        if ( !GL )
-          {
+        if (!GL){
               qFatal("Requires OpenGL >= 4.0");
-          }
+        }
         else
         {
           GL->initializeOpenGLFunctions();
@@ -66,9 +58,12 @@ int main(int argc, char *argv[])
     // Main Application
     QGuiApplication a(argc, argv);
 
+    QWindow t;
+    t.show();
+
     // Generate a some Contexts with Windows
     std::vector<DATA_TYPE> data;
-    for (size_t idx = 0; idx != 2; ++idx)
+    for (size_t idx = 0; idx != 5; ++idx)
         data.push_back(std::move(std::make_tuple(CTX_TYPE(new ximu::GlContext()), WINDOW_TYPE(new QWindow))));
 
     // Initialize
@@ -101,6 +96,7 @@ int main(int argc, char *argv[])
           std::get<0>(d)->destroy();
           QMetaObject::invokeMethod(std::get<1>(d).get(), "close", Qt::QueuedConnection);
         }
+        QMetaObject::invokeMethod(&t, "close", Qt::QueuedConnection);
 
     });
 

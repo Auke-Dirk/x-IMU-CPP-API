@@ -1,6 +1,8 @@
+/*
+  Copyright 2015 Auke-Dirk Pietersma
+*/
 #include "ximuapi/gl/gl_context.h"
 #include <QSurfaceFormat>
-#include <iostream>
 #include <QOpenGLFunctions_4_0_Core>
 
 namespace ximu{
@@ -21,17 +23,9 @@ void GlContext::create()
     std::lock_guard<std::mutex> lock(_mutex);
     if (_state == State::UN_INITIALIZED)
     {
-        bool useq = true;
-        if (useq)
-        {
-            std::thread tmp(&GlContext::run,this);
-            _thread.swap(tmp);
-            _state = State::ACTIVE;
-        }else
-        {
-            connect(&_qthread,SIGNAL(started()),this,SLOT(run()));
-            _qthread.start();
-        }
+        std::thread tmp(&GlContext::run,this);
+        _thread.swap(tmp);
+        _state = State::ACTIVE;
     }
 }
 
@@ -85,31 +79,25 @@ void GlContext::destroy()
     _tasks.push([&]{_active = false;});
 }
 
-
 void GlContext::pMakeCurrent(QSurface* surface)
-{
-    std::cout << "Points!" << surface << std::endl;
+{    
     if (_ctx->isValid())
         if (_ctx->makeCurrent(surface))
             _surfacePtr = surface;
-
 }
 
 void GlContext::makeCurrent(QSurface* surface)
 {
     std::lock_guard<std::mutex> lock(_mutex);
-    _tasks.push([=]
-    {
-        this->pMakeCurrent(surface);
-    });
+    _tasks.push( [=] { this->pMakeCurrent(surface);} );
 }
 
 size_t GlContext::add(std::shared_ptr<IGlRenderer> renderer)
 {
     std::lock_guard<std::mutex> lock(_mutex);
     ++_rendererId;
-    _renderers[_rendererId] =renderer;
-    _tasks.push([=]{renderer->initializeGL(_ctx);});
+    _renderers[_rendererId] = renderer;
+    _tasks.push( [=] {renderer->initializeGL(_ctx);} );
     return _rendererId;
 }
 
