@@ -16,9 +16,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     SimpleWindow w;
 
-    // call close in 10 seconds
+    // call close in 4 seconds
     std::thread closer( [&] {
-        std::this_thread::sleep_for(std::chrono::seconds(10));
+        std::this_thread::sleep_for(std::chrono::seconds(4));
         QMetaObject::invokeMethod(&w, "close", Qt::QueuedConnection);
     });
 

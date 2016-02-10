@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     QQuaternion q1 = QQuaternion(1,0.01,0.01,0.01);
     QQuaternion q2 = QQuaternion(1,0,0,0);
 
-    size_t calls = 400;
+    size_t calls = 100;
 
     std::thread closer( [&] {
         while(--calls  > 0)

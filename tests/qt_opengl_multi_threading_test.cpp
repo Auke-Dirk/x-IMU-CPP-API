@@ -5,6 +5,7 @@
 #include <vector>
 #include <thread>
 #include <memory>
+#include <random>
 #include <QDebug>
 #include <QScreen>
 #include <QWindow>
@@ -67,15 +68,22 @@ int main(int argc, char *argv[])
         data.push_back(std::move(std::make_tuple(CTX_TYPE(new ximu::GlContext()), WINDOW_TYPE(new QWindow))));
 
     // Initialize
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(-100.0, 100.0);
     for(auto& d : data)
     {
        std::get<0>(d)->create();
        std::get<1>(d)->setSurfaceType(QWindow::OpenGLSurface);
        std::get<1>(d)->show();
+       auto geom = std::get<1>(d)->geometry();
+       geom.adjust(static_cast<int>(dist(mt)),static_cast<int>(dist(mt)),
+                   static_cast<int>(dist(mt)),static_cast<int>(dist(mt)));
+       std::get<1>(d)->setGeometry(geom);
     }
 
     // Assume application runtime
-    size_t numCalls = 1000;
+    size_t numCalls = 100;
     size_t calls = numCalls;
     std::thread closer( [&] {
         while(--calls  > 0)
