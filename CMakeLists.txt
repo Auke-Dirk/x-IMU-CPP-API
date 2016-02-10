@@ -173,7 +173,11 @@ if (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
     list(APPEND X_IMU_GUI_H ${SERIALVIEW_MOC_HDRS})
 endif (Qt5SerialPort_FOUND AND Qt5Widgets_FOUND)
 
-
+if(Qt5OpenGL_MINOR_5_FOUND)
+   qt5_wrap_cpp(MOC_GL include/ximuapi/gl/gl_context.h)
+   set(X_IMU_API_GL src/ximuapi/gl/gl_context.cpp)
+   MESSAGE(STATUS "--->${X_IMU_API_GL}")
+endif()
 
 if(Qt5OpenGL_MINOR_5_FOUND AND Qt5Widgets_FOUND)
     set(ORIENTATIONVIEW_MOC_HDRS include/ximugui/widgets/orientationview.h)
@@ -184,7 +188,7 @@ endif()
 
 
 # add functionality to the library
-add_library(X-IMU-API STATIC ${X_IMU_API_SRC} ${X_IMU_API_SERIAL} ${MOC_SERIAL})
+add_library(X-IMU-API STATIC ${X_IMU_API_SRC} ${X_IMU_API_SERIAL} ${MOC_SERIAL} ${X_IMU_API_GL} ${MOC_GL})
 
 
 if (Qt5SerialPort_FOUND)
@@ -255,6 +259,9 @@ if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND AND Qt5OpenGL_MINOR_5_FOUND)
     add_executable (QT_OPENGL_TEST tests/qt_opengl_test.cpp src/ximugui/widgets/orientationview.cpp src/ximugui/widgets/geometryengine.cpp
 ${UI_HEADERS} ${ORIENTATIONVIEW_MOC_SRCS} ${ORIENTATIONVIEW_RCC_SRCS})
     target_link_libraries(QT_OPENGL_TEST X-IMU-API Qt5::Widgets Qt5::OpenGL ${CMAKE_THREAD_LIBS_INIT})
+
+    add_executable (QT_MULTI_THREADING_TEST tests/qt_opengl_multi_threading_test.cpp )
+    target_link_libraries(QT_MULTI_THREADING_TEST X-IMU-API Qt5::Widgets Qt5::OpenGL ${CMAKE_THREAD_LIBS_INIT})
 endif ()
 
 
@@ -283,6 +290,7 @@ endif (Qt5Widgets_FOUND)
 
 if (Qt5Widgets_FOUND AND QtOpenGL_FOUND)
     add_test(QT_OPENGL QT_OPENGL_TEST)
+    add_test(QT_OPEN_GL_MULTI_THREADING QT_MULTI_THREADING_TEST)
 endif ()
 
 ################################
